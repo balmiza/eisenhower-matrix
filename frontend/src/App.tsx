@@ -26,7 +26,7 @@ const App: React.FC = () => {
     try {
       setLoading(true)
       const data = await getAllTasks()
-      setTasks(data)
+      setTasks(Array.isArray(data) ? data : [])
       setError(null)
     } catch {
       setError('Erro ao carregar tarefas. Verifique a conexão com o servidor.')
