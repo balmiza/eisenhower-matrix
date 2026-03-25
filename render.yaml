@@ -5,6 +5,10 @@ services:
     env: docker
     dockerfilePath: ./Dockerfile
     envVars:
-      - key: DATABASE_URL
+      - key: DB_URL
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
         sync: false
     healthCheckPath: /api/tasks
