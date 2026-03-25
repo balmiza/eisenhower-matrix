@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: eisenhower-matrix-api
+    rootDir: backend
+    env: docker
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+    healthCheckPath: /api/tasks
