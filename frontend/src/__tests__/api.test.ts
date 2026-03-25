@@ -1,9 +1,5 @@
-import axios from 'axios'
 import { createTask, getAllTasks, completeTask, deleteTask } from '../services/api'
 import { Task } from '../types/Task'
-
-jest.mock('axios')
-const mockedAxios = axios as jest.Mocked<typeof axios>
 
 const mockTask: Task = {
   id: 'abc-123',
@@ -13,15 +9,6 @@ const mockTask: Task = {
   status: 'PENDING',
   createdAt: '2026-03-25T10:00:00',
   completedAt: null,
-}
-
-// We need to mock the axios.create() call
-const mockAxiosInstance = {
-  post: jest.fn(),
-  get: jest.fn(),
-  patch: jest.fn(),
-  delete: jest.fn(),
-  create: jest.fn(),
 }
 
 jest.mock('axios', () => ({
