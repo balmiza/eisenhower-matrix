@@ -68,7 +68,7 @@ class TaskServiceTest {
 
         assertThat(result).hasSize(2);
         assertThat(result).containsExactlyInAnyOrder(task1, task2);
-        verify(taskRepository, times(1)).findByMatrix(Matrix.PERSONAL);
+        verify(taskRepository, times(1)).findAllByMatrixOrderByDueDate(Matrix.PERSONAL);
     }
 
     @Test
