@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -22,5 +22,5 @@ public class TaskRequest {
     @NotNull(message = "Quadrant is required")
     private Quadrant quadrant;
 
-    private LocalDate dueDate;
+    private LocalDateTime dueDate;
 }
