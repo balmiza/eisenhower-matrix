@@ -7,6 +7,8 @@ const mockTask: Task = {
   description: 'Test description',
   quadrant: 'Q1',
   status: 'PENDING',
+  matrix: 'PERSONAL',
+  dueDate: null,
   createdAt: '2026-03-25T10:00:00',
   completedAt: null,
 }
@@ -46,7 +48,7 @@ describe('api service', () => {
 
     const result = await getAllTasks()
 
-    expect(spy).toHaveBeenCalledWith('/tasks')
+    expect(spy).toHaveBeenCalledWith('/tasks?matrix=PERSONAL')
     expect(result).toEqual(tasks)
   })
 

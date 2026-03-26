@@ -1,16 +1,18 @@
 import React, { useState } from 'react'
-import { Quadrant, Task } from '../types/Task'
+import { Quadrant, Matrix, Task } from '../types/Task'
 import { createTask } from '../services/api'
 
 interface AddTaskModalProps {
   quadrant: Quadrant
+  matrix: Matrix
   onAdd: (task: Task) => void
   onClose: () => void
 }
 
-const AddTaskModal: React.FC<AddTaskModalProps> = ({ quadrant, onAdd, onClose }) => {
+const AddTaskModal: React.FC<AddTaskModalProps> = ({ quadrant, matrix, onAdd, onClose }) => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
+  const [dueDate, setDueDate] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -27,6 +29,8 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({ quadrant, onAdd, onClose })
         title: title.trim(),
         description: description.trim() || undefined,
         quadrant,
+        dueDate: dueDate || undefined,
+        matrix,
       })
       onAdd(task)
       onClose()
@@ -73,6 +77,18 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({ quadrant, onAdd, onClose })
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Detalhes da tarefa..."
               rows={3}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="task-due-date" className="form-label">
+              Data e hora limite (opcional)
+            </label>
+            <input
+              id="task-due-date"
+              type="datetime-local"
+              className="form-input"
+              value={dueDate}
+              onChange={(e) => setDueDate(e.target.value)}
             />
           </div>
           {error && <p className="form-error">{error}</p>}

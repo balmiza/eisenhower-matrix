@@ -1,6 +1,7 @@
 package com.squad.api.service;
 
 import com.squad.api.dto.TaskRequest;
+import com.squad.api.model.Matrix;
 import com.squad.api.model.Quadrant;
 import com.squad.api.model.Status;
 import com.squad.api.model.Task;
@@ -26,19 +27,21 @@ public class TaskService {
                 .title(request.getTitle())
                 .description(request.getDescription())
                 .quadrant(request.getQuadrant())
+                .dueDate(request.getDueDate())
                 .status(Status.PENDING)
+                .matrix(request.getMatrix() != null ? request.getMatrix() : Matrix.PERSONAL)
                 .build();
         return taskRepository.save(task);
     }
 
     @Transactional(readOnly = true)
-    public List<Task> getAllTasks() {
-        return taskRepository.findAll();
+    public List<Task> getAllTasksByMatrix(Matrix matrix) {
+        return taskRepository.findAllByMatrixOrderByDueDate(matrix);
     }
 
     @Transactional(readOnly = true)
-    public List<Task> getTasksByQuadrant(Quadrant quadrant) {
-        return taskRepository.findByQuadrant(quadrant);
+    public List<Task> getTasksByQuadrantAndMatrix(Quadrant quadrant, Matrix matrix) {
+        return taskRepository.findByQuadrantAndMatrixOrderByDueDate(quadrant, matrix);
     }
 
     @Transactional
