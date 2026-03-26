@@ -41,7 +41,7 @@ class TaskControllerTest {
 
     @Test
     void createTask_returns201() throws Exception {
-        TaskRequest request = new TaskRequest("New Task", "Description", Quadrant.Q1);
+        TaskRequest request = new TaskRequest("New Task", "Description", Quadrant.Q1, null);
         Task createdTask = Task.builder()
                 .id(UUID.randomUUID())
                 .title("New Task")
