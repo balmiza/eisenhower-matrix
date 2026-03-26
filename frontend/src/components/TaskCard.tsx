@@ -7,6 +7,11 @@ interface TaskCardProps {
   onDelete: (id: string) => void
 }
 
+const formatDate = (date: string): string => {
+  const [year, month, day] = date.split('-')
+  return `${day}/${month}/${year}`
+}
+
 const TaskCard: React.FC<TaskCardProps> = ({ task, onComplete, onDelete }) => {
   const isDone = task.status === 'DONE'
 
@@ -34,6 +39,11 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onComplete, onDelete }) => {
             }}
           >
             {task.description}
+          </p>
+        )}
+        {task.dueDate && (
+          <p className="task-card__due-date">
+            📅 {formatDate(task.dueDate)}
           </p>
         )}
       </div>

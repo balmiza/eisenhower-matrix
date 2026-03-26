@@ -27,6 +27,7 @@ public class TaskService {
                 .title(request.getTitle())
                 .description(request.getDescription())
                 .quadrant(request.getQuadrant())
+                .dueDate(request.getDueDate())
                 .status(Status.PENDING)
                 .matrix(request.getMatrix() != null ? request.getMatrix() : Matrix.PERSONAL)
                 .build();
@@ -34,23 +35,13 @@ public class TaskService {
     }
 
     @Transactional(readOnly = true)
-    public List<Task> getAllTasks() {
-        return taskRepository.findAll();
-    }
-
-    @Transactional(readOnly = true)
     public List<Task> getAllTasksByMatrix(Matrix matrix) {
-        return taskRepository.findByMatrix(matrix);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Task> getTasksByQuadrant(Quadrant quadrant) {
-        return taskRepository.findByQuadrant(quadrant);
+        return taskRepository.findAllByMatrixOrderByDueDate(matrix);
     }
 
     @Transactional(readOnly = true)
     public List<Task> getTasksByQuadrantAndMatrix(Quadrant quadrant, Matrix matrix) {
-        return taskRepository.findByQuadrantAndMatrix(quadrant, matrix);
+        return taskRepository.findByQuadrantAndMatrixOrderByDueDate(quadrant, matrix);
     }
 
     @Transactional

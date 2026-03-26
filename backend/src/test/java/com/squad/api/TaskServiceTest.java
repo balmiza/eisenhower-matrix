@@ -62,7 +62,7 @@ class TaskServiceTest {
         Task task1 = Task.builder().id(UUID.randomUUID()).title("Task 1").quadrant(Quadrant.Q1).status(Status.PENDING).build();
         Task task2 = Task.builder().id(UUID.randomUUID()).title("Task 2").quadrant(Quadrant.Q2).status(Status.DONE).build();
 
-        when(taskRepository.findByMatrix(Matrix.PERSONAL)).thenReturn(Arrays.asList(task1, task2));
+        when(taskRepository.findAllByMatrixOrderByDueDate(Matrix.PERSONAL)).thenReturn(Arrays.asList(task1, task2));
 
         List<Task> result = taskService.getAllTasksByMatrix(Matrix.PERSONAL);
 

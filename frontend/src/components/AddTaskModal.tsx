@@ -12,6 +12,7 @@ interface AddTaskModalProps {
 const AddTaskModal: React.FC<AddTaskModalProps> = ({ quadrant, matrix, onAdd, onClose }) => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
+  const [dueDate, setDueDate] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -76,6 +77,18 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({ quadrant, matrix, onAdd, on
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Detalhes da tarefa..."
               rows={3}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="task-due-date" className="form-label">
+              Data limite (opcional)
+            </label>
+            <input
+              id="task-due-date"
+              type="date"
+              className="form-input"
+              value={dueDate}
+              onChange={(e) => setDueDate(e.target.value)}
             />
           </div>
           {error && <p className="form-error">{error}</p>}
