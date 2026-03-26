@@ -9,6 +9,7 @@ const mockPendingTask: Task = {
   description: 'Descrição da tarefa',
   quadrant: 'Q1',
   status: 'PENDING',
+  dueDate: null,
   createdAt: '2026-03-25T10:00:00',
   completedAt: null,
 }
