@@ -344,6 +344,56 @@ body {
   color: #374151;
 }
 
+.btn--danger {
+  background-color: #dc2626;
+  color: #fff;
+}
+
+/* === Toast === */
+.toast-container {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 1000;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  color: #fff;
+  font-size: 0.875rem;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  animation: slideIn 0.2s ease;
+  min-width: 220px;
+}
+
+.toast--success { background: #16a34a; }
+.toast--error   { background: #dc2626; }
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+/* === Confirm modal === */
+.confirm-modal {
+  max-width: 360px;
+}
+
+.confirm-modal__message {
+  font-size: 0.95rem;
+  color: #374151;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
 /* === App Layout with Sidebar === */
 .app-layout {
   display: flex;

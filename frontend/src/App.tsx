@@ -3,6 +3,8 @@ import { Task, Quadrant, Matrix } from './types/Task'
 import { getAllTasks, completeTask, deleteTask } from './services/api'
 import QuadrantComponent from './components/Quadrant'
 import AddTaskModal from './components/AddTaskModal'
+import Toast, { ToastMessage, ToastType } from './components/Toast'
+import ConfirmModal from './components/ConfirmModal'
 import Sidebar from './components/Sidebar'
 import './App.css'
 
@@ -21,6 +23,14 @@ const App: React.FC = () => {
   const [selectedMatrix, setSelectedMatrix] = useState<Matrix>('PERSONAL')
   const [sortBy, setSortBy] = useState<'dueDate' | 'createdAt'>('dueDate')
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [toasts, setToasts] = useState<ToastMessage[]>([])
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
+
+  const showToast = (message: string, type: ToastType) => {
+    const id = Date.now()
+    setToasts((prev) => [...prev, { id, message, type }])
+  }
+  const dismissToast = (id: number) => setToasts((prev) => prev.filter((t) => t.id !== id))
 
   useEffect(() => {
     loadTasks()
@@ -47,18 +57,25 @@ const App: React.FC = () => {
     try {
       const updatedTask = await completeTask(id)
       setTasks((prev) => prev.map((t) => (t.id === id ? updatedTask : t)))
+      showToast('Tarefa concluída!', 'success')
     } catch {
-      alert('Erro ao concluir tarefa.')
+      showToast('Erro ao concluir tarefa.', 'error')
     }
   }
 
-  const handleDeleteTask = async (id: string) => {
-    if (!window.confirm('Tem certeza que deseja deletar esta tarefa?')) return
+  const handleDeleteTask = (id: string) => {
+    setConfirmDeleteId(id)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (!confirmDeleteId) return
+    const id = confirmDeleteId
+    setConfirmDeleteId(null)
     try {
       await deleteTask(id)
       setTasks((prev) => prev.filter((t) => t.id !== id))
     } catch {
-      alert('Erro ao deletar tarefa.')
+      showToast('Erro ao deletar tarefa.', 'error')
     }
   }
 
@@ -149,6 +166,15 @@ const App: React.FC = () => {
           )}
         </div>
       </div>
+
+      <Toast toasts={toasts} onDismiss={dismissToast} />
+      {confirmDeleteId && (
+        <ConfirmModal
+          message="Tem certeza que deseja deletar esta tarefa?"
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setConfirmDeleteId(null)}
+        />
+      )}
     </div>
   )
 }
