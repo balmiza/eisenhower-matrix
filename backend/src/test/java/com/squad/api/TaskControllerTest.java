@@ -3,6 +3,7 @@ package com.squad.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squad.api.controller.TaskController;
 import com.squad.api.dto.TaskRequest;
+import com.squad.api.model.Matrix;
 import com.squad.api.model.Quadrant;
 import com.squad.api.model.Status;
 import com.squad.api.model.Task;
@@ -41,7 +42,7 @@ class TaskControllerTest {
 
     @Test
     void createTask_returns201() throws Exception {
-        TaskRequest request = new TaskRequest("New Task", "Description", Quadrant.Q1);
+        TaskRequest request = new TaskRequest("New Task", "Description", Quadrant.Q1, null, null);
         Task createdTask = Task.builder()
                 .id(UUID.randomUUID())
                 .title("New Task")
@@ -67,7 +68,7 @@ class TaskControllerTest {
         Task task1 = Task.builder().id(UUID.randomUUID()).title("Task 1").quadrant(Quadrant.Q1).status(Status.PENDING).createdAt(LocalDateTime.now()).build();
         Task task2 = Task.builder().id(UUID.randomUUID()).title("Task 2").quadrant(Quadrant.Q2).status(Status.DONE).createdAt(LocalDateTime.now()).build();
 
-        when(taskService.getAllTasks()).thenReturn(Arrays.asList(task1, task2));
+        when(taskService.getAllTasksByMatrix(Matrix.PERSONAL)).thenReturn(Arrays.asList(task1, task2));
 
         mockMvc.perform(get("/api/tasks"))
                 .andExpect(status().isOk())

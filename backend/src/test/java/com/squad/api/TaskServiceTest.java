@@ -1,6 +1,7 @@
 package com.squad.api;
 
 import com.squad.api.dto.TaskRequest;
+import com.squad.api.model.Matrix;
 import com.squad.api.model.Quadrant;
 import com.squad.api.model.Status;
 import com.squad.api.model.Task;
@@ -35,7 +36,7 @@ class TaskServiceTest {
 
     @Test
     void createTask_success() {
-        TaskRequest request = new TaskRequest("Buy groceries", "Milk and eggs", Quadrant.Q1);
+        TaskRequest request = new TaskRequest("Buy groceries", "Milk and eggs", Quadrant.Q1, null, null);
         Task savedTask = Task.builder()
                 .id(UUID.randomUUID())
                 .title("Buy groceries")
@@ -61,13 +62,13 @@ class TaskServiceTest {
         Task task1 = Task.builder().id(UUID.randomUUID()).title("Task 1").quadrant(Quadrant.Q1).status(Status.PENDING).build();
         Task task2 = Task.builder().id(UUID.randomUUID()).title("Task 2").quadrant(Quadrant.Q2).status(Status.DONE).build();
 
-        when(taskRepository.findAll()).thenReturn(Arrays.asList(task1, task2));
+        when(taskRepository.findByMatrix(Matrix.PERSONAL)).thenReturn(Arrays.asList(task1, task2));
 
-        List<Task> result = taskService.getAllTasks();
+        List<Task> result = taskService.getAllTasksByMatrix(Matrix.PERSONAL);
 
         assertThat(result).hasSize(2);
         assertThat(result).containsExactlyInAnyOrder(task1, task2);
-        verify(taskRepository, times(1)).findAll();
+        verify(taskRepository, times(1)).findByMatrix(Matrix.PERSONAL);
     }
 
     @Test

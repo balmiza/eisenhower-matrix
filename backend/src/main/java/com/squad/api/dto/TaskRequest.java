@@ -1,5 +1,6 @@
 package com.squad.api.dto;
 
+import com.squad.api.model.Matrix;
 import com.squad.api.model.Quadrant;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,4 +20,6 @@ public class TaskRequest {
 
     @NotNull(message = "Quadrant is required")
     private Quadrant quadrant;
+
+    private Matrix matrix;
 }

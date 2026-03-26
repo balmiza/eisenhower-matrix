@@ -343,3 +343,57 @@ body {
   background-color: #e5e7eb;
   color: #374151;
 }
+
+/* === App Layout with Sidebar === */
+.app-layout {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 200px;
+  min-width: 200px;
+  background: #1e1e2e;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-right: 1px solid #333;
+}
+
+.sidebar__title {
+  color: #aaa;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.sidebar__item {
+  background: none;
+  border: none;
+  color: #ccc;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.sidebar__item:hover {
+  background: #2a2a3e;
+}
+
+.sidebar__item--active {
+  background: #3b3b5c;
+  color: #fff;
+  font-weight: 600;
+}
+
+.app-content {
+  flex: 1;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}

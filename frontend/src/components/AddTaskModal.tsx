@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
-import { Quadrant, Task } from '../types/Task'
+import { Quadrant, Matrix, Task } from '../types/Task'
 import { createTask } from '../services/api'
 
 interface AddTaskModalProps {
   quadrant: Quadrant
+  matrix: Matrix
   onAdd: (task: Task) => void
   onClose: () => void
 }
 
-const AddTaskModal: React.FC<AddTaskModalProps> = ({ quadrant, onAdd, onClose }) => {
+const AddTaskModal: React.FC<AddTaskModalProps> = ({ quadrant, matrix, onAdd, onClose }) => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [loading, setLoading] = useState(false)
@@ -27,6 +28,8 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({ quadrant, onAdd, onClose })
         title: title.trim(),
         description: description.trim() || undefined,
         quadrant,
+        dueDate: dueDate || undefined,
+        matrix,
       })
       onAdd(task)
       onClose()
