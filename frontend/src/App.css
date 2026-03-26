@@ -343,3 +343,13 @@ body {
   background-color: #e5e7eb;
   color: #374151;
 }
+
+/* === Overdue indicator === */
+.task-card--overdue {
+  border-left: 3px solid #ef4444;
+}
+
+.task-card__due-date--overdue {
+  color: #ef4444;
+  font-weight: 600;
+}
