@@ -54,6 +54,14 @@ public class TaskService {
     }
 
     @Transactional
+    public Task moveTask(UUID id, Quadrant quadrant) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Task not found with id: " + id));
+        task.setQuadrant(quadrant);
+        return taskRepository.save(task);
+    }
+
+    @Transactional
     public void deleteTask(UUID id) {
         if (!taskRepository.existsById(id)) {
             throw new EntityNotFoundException("Task not found with id: " + id);

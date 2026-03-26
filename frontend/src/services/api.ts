@@ -33,6 +33,11 @@ export const completeTask = async (id: string): Promise<Task> => {
   return response.data
 }
 
+export const moveTask = async (id: string, quadrant: Quadrant): Promise<Task> => {
+  const response = await api.patch<Task>(`/tasks/${id}/move?quadrant=${quadrant}`)
+  return response.data
+}
+
 export const deleteTask = async (id: string): Promise<void> => {
   await api.delete(`/tasks/${id}`)
 }
