@@ -26,6 +26,7 @@ public class TaskService {
                 .title(request.getTitle())
                 .description(request.getDescription())
                 .quadrant(request.getQuadrant())
+                .dueDate(request.getDueDate())
                 .status(Status.PENDING)
                 .build();
         return taskRepository.save(task);
@@ -33,12 +34,12 @@ public class TaskService {
 
     @Transactional(readOnly = true)
     public List<Task> getAllTasks() {
-        return taskRepository.findAll();
+        return taskRepository.findAllOrderByDueDate();
     }
 
     @Transactional(readOnly = true)
     public List<Task> getTasksByQuadrant(Quadrant quadrant) {
-        return taskRepository.findByQuadrant(quadrant);
+        return taskRepository.findByQuadrantOrderByDueDate(quadrant);
     }
 
     @Transactional

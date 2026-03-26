@@ -9,6 +9,7 @@ export interface CreateTaskData {
   title: string
   description?: string
   quadrant: Quadrant
+  dueDate?: string
 }
 
 export const createTask = async (data: CreateTaskData): Promise<Task> => {

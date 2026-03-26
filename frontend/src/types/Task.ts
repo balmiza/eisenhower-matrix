@@ -7,6 +7,7 @@ export interface Task {
   description: string | null
   quadrant: Quadrant
   status: Status
+  dueDate: string | null
   createdAt: string
   completedAt: string | null
 }
