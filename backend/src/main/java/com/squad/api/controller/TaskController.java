@@ -44,6 +44,12 @@ public class TaskController {
         return ResponseEntity.ok(task);
     }
 
+    @PatchMapping("/{id}/move")
+    public ResponseEntity<Task> moveTask(@PathVariable UUID id, @RequestParam Quadrant quadrant) {
+        Task task = taskService.moveTask(id, quadrant);
+        return ResponseEntity.ok(task);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable UUID id) {
         taskService.deleteTask(id);
