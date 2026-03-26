@@ -396,6 +396,8 @@ body {
   overflow: auto;
   display: flex;
   flex-direction: column;
+}
+
 /* === Overdue indicator === */
 .task-card--overdue {
   border-left: 3px solid #ef4444;
