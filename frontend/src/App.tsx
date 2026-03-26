@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Task, Quadrant, Matrix } from './types/Task'
-import { getAllTasks, completeTask, deleteTask } from './services/api'
+import { getAllTasks, completeTask, deleteTask, moveTask } from './services/api'
 import QuadrantComponent from './components/Quadrant'
 import AddTaskModal from './components/AddTaskModal'
 import Toast, { ToastMessage, ToastType } from './components/Toast'
@@ -60,6 +60,16 @@ const App: React.FC = () => {
       showToast('Tarefa concluída!', 'success')
     } catch {
       showToast('Erro ao concluir tarefa.', 'error')
+    }
+  }
+
+  const handleMoveTask = async (taskId: string, targetQuadrant: Quadrant) => {
+    try {
+      const updatedTask = await moveTask(taskId, targetQuadrant)
+      setTasks((prev) => prev.map((t) => (t.id === taskId ? updatedTask : t)))
+      showToast('Tarefa movida!', 'success')
+    } catch {
+      showToast('Erro ao mover tarefa.', 'error')
     }
   }
 
@@ -152,6 +162,7 @@ const App: React.FC = () => {
                 onComplete={handleCompleteTask}
                 onDelete={handleDeleteTask}
                 onAddTask={setModalQuadrant}
+                onMoveTask={handleMoveTask}
               />
             ))}
           </main>

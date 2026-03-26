@@ -78,6 +78,15 @@ body {
   min-height: 300px;
 }
 
+.quadrant--drag-over {
+  background-color: #eff6ff;
+  border: 2px dashed #6366f1;
+}
+
+.task-card--dragging {
+  opacity: 0.5;
+}
+
 .quadrant__header {
   display: flex;
   align-items: center;
