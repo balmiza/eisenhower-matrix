@@ -79,11 +79,11 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({ quadrant, onAdd, onClose })
           </div>
           <div className="form-group">
             <label htmlFor="task-due-date" className="form-label">
-              Data limite (opcional)
+              Data e hora limite (opcional)
             </label>
             <input
               id="task-due-date"
-              type="date"
+              type="datetime-local"
               className="form-input"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
