@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { Task, Quadrant } from './types/Task'
+import { Task, Quadrant, Matrix } from './types/Task'
 import { getAllTasks, completeTask, deleteTask } from './services/api'
 import QuadrantComponent from './components/Quadrant'
 import AddTaskModal from './components/AddTaskModal'
+import Sidebar from './components/Sidebar'
 import './App.css'
 
 const QUADRANTS: { key: Quadrant; title: string; color: string }[] = [
@@ -17,16 +18,17 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [modalQuadrant, setModalQuadrant] = useState<Quadrant | null>(null)
+  const [selectedMatrix, setSelectedMatrix] = useState<Matrix>('PERSONAL')
   const [sortBy, setSortBy] = useState<'dueDate' | 'createdAt'>('dueDate')
 
   useEffect(() => {
     loadTasks()
-  }, [])
+  }, [selectedMatrix])
 
   const loadTasks = async () => {
     try {
       setLoading(true)
-      const data = await getAllTasks()
+      const data = await getAllTasks(selectedMatrix)
       setTasks(Array.isArray(data) ? data : [])
       setError(null)
     } catch {
@@ -81,49 +83,55 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="app">
-      <header className="app-header">
-        <h1 className="app-title">Matriz de Eisenhower</h1>
-        <div className="sort-controls">
-          <span className="sort-controls__label">Ordenar por:</span>
-          <button
-            className={`sort-controls__btn ${sortBy === 'dueDate' ? 'sort-controls__btn--active' : ''}`}
-            onClick={() => setSortBy('dueDate')}
-          >
-            Data Limite
-          </button>
-          <button
-            className={`sort-controls__btn ${sortBy === 'createdAt' ? 'sort-controls__btn--active' : ''}`}
-            onClick={() => setSortBy('createdAt')}
-          >
-            Data de Criação
-          </button>
+    <div className="app-layout">
+      <Sidebar selected={selectedMatrix} onChange={(m) => setSelectedMatrix(m)} />
+      <div className="app-content">
+        <div className="app">
+          <header className="app-header">
+            <h1 className="app-title">Matriz de Eisenhower</h1>
+            <div className="sort-controls">
+              <span className="sort-controls__label">Ordenar por:</span>
+              <button
+                className={`sort-controls__btn ${sortBy === 'dueDate' ? 'sort-controls__btn--active' : ''}`}
+                onClick={() => setSortBy('dueDate')}
+              >
+                Data Limite
+              </button>
+              <button
+                className={`sort-controls__btn ${sortBy === 'createdAt' ? 'sort-controls__btn--active' : ''}`}
+                onClick={() => setSortBy('createdAt')}
+              >
+                Data de Criação
+              </button>
+            </div>
+            {error && <p className="app-error">{error}</p>}
+          </header>
+
+          <main className="matrix-grid">
+            {QUADRANTS.map(({ key, title, color }) => (
+              <QuadrantComponent
+                key={key}
+                quadrant={key}
+                title={title}
+                color={color}
+                tasks={getTasksByQuadrant(key)}
+                onComplete={handleCompleteTask}
+                onDelete={handleDeleteTask}
+                onAddTask={setModalQuadrant}
+              />
+            ))}
+          </main>
+
+          {modalQuadrant && (
+            <AddTaskModal
+              quadrant={modalQuadrant}
+              matrix={selectedMatrix}
+              onAdd={handleAddTask}
+              onClose={() => setModalQuadrant(null)}
+            />
+          )}
         </div>
-        {error && <p className="app-error">{error}</p>}
-      </header>
-
-      <main className="matrix-grid">
-        {QUADRANTS.map(({ key, title, color }) => (
-          <QuadrantComponent
-            key={key}
-            quadrant={key}
-            title={title}
-            color={color}
-            tasks={getTasksByQuadrant(key)}
-            onComplete={handleCompleteTask}
-            onDelete={handleDeleteTask}
-            onAddTask={setModalQuadrant}
-          />
-        ))}
-      </main>
-
-      {modalQuadrant && (
-        <AddTaskModal
-          quadrant={modalQuadrant}
-          onAdd={handleAddTask}
-          onClose={() => setModalQuadrant(null)}
-        />
-      )}
+      </div>
     </div>
   )
 }

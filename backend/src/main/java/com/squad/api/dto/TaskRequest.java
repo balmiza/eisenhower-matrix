@@ -1,5 +1,6 @@
 package com.squad.api.dto;
 
+import com.squad.api.model.Matrix;
 import com.squad.api.model.Quadrant;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -23,4 +24,6 @@ public class TaskRequest {
     private Quadrant quadrant;
 
     private LocalDateTime dueDate;
+
+    private Matrix matrix;
 }

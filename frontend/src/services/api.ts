@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Task, Quadrant } from '../types/Task'
+import { Task, Quadrant, Matrix } from '../types/Task'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || '/api',
@@ -10,6 +10,7 @@ export interface CreateTaskData {
   description?: string
   quadrant: Quadrant
   dueDate?: string
+  matrix?: Matrix
 }
 
 export const createTask = async (data: CreateTaskData): Promise<Task> => {
@@ -17,8 +18,8 @@ export const createTask = async (data: CreateTaskData): Promise<Task> => {
   return response.data
 }
 
-export const getAllTasks = async (): Promise<Task[]> => {
-  const response = await api.get<Task[]>('/tasks')
+export const getAllTasks = async (matrix: Matrix = 'PERSONAL'): Promise<Task[]> => {
+  const response = await api.get<Task[]>(`/tasks?matrix=${matrix}`)
   return response.data
 }
 
