@@ -1,6 +1,7 @@
 package com.squad.api.controller;
 
 import com.squad.api.dto.TaskRequest;
+import com.squad.api.model.Matrix;
 import com.squad.api.model.Quadrant;
 import com.squad.api.model.Task;
 import com.squad.api.service.TaskService;
@@ -29,11 +30,12 @@ public class TaskController {
 
     @GetMapping
     public ResponseEntity<List<Task>> getTasks(
-            @RequestParam(required = false) Quadrant quadrant) {
+            @RequestParam(required = false) Quadrant quadrant,
+            @RequestParam(required = false, defaultValue = "PERSONAL") Matrix matrix) {
         if (quadrant != null) {
-            return ResponseEntity.ok(taskService.getTasksByQuadrant(quadrant));
+            return ResponseEntity.ok(taskService.getTasksByQuadrantAndMatrix(quadrant, matrix));
         }
-        return ResponseEntity.ok(taskService.getAllTasks());
+        return ResponseEntity.ok(taskService.getAllTasksByMatrix(matrix));
     }
 
     @PatchMapping("/{id}/complete")

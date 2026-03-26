@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import com.squad.api.model.Matrix;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -37,6 +38,11 @@ public class Task {
     @Column(nullable = false)
     @Builder.Default
     private Status status = Status.PENDING;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Builder.Default
+    private Matrix matrix = Matrix.PERSONAL;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
