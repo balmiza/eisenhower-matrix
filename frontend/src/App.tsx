@@ -17,6 +17,7 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [modalQuadrant, setModalQuadrant] = useState<Quadrant | null>(null)
+  const [sortBy, setSortBy] = useState<'dueDate' | 'createdAt'>('dueDate')
 
   useEffect(() => {
     loadTasks()
@@ -58,8 +59,18 @@ const App: React.FC = () => {
     }
   }
 
-  const getTasksByQuadrant = (quadrant: Quadrant): Task[] =>
-    tasks.filter((t) => t.quadrant === quadrant)
+  const getTasksByQuadrant = (quadrant: Quadrant): Task[] => {
+    const filtered = tasks.filter((t) => t.quadrant === quadrant)
+    return [...filtered].sort((a, b) => {
+      if (sortBy === 'dueDate') {
+        if (!a.dueDate && !b.dueDate) return 0
+        if (!a.dueDate) return 1
+        if (!b.dueDate) return -1
+        return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
+      }
+      return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+    })
+  }
 
   if (loading) {
     return (
@@ -73,6 +84,21 @@ const App: React.FC = () => {
     <div className="app">
       <header className="app-header">
         <h1 className="app-title">Matriz de Eisenhower</h1>
+        <div className="sort-controls">
+          <span className="sort-controls__label">Ordenar por:</span>
+          <button
+            className={`sort-controls__btn ${sortBy === 'dueDate' ? 'sort-controls__btn--active' : ''}`}
+            onClick={() => setSortBy('dueDate')}
+          >
+            Data Limite
+          </button>
+          <button
+            className={`sort-controls__btn ${sortBy === 'createdAt' ? 'sort-controls__btn--active' : ''}`}
+            onClick={() => setSortBy('createdAt')}
+          >
+            Data de Criação
+          </button>
+        </div>
         {error && <p className="app-error">{error}</p>}
       </header>
 
