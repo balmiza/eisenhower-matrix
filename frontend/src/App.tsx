@@ -20,6 +20,7 @@ const App: React.FC = () => {
   const [modalQuadrant, setModalQuadrant] = useState<Quadrant | null>(null)
   const [selectedMatrix, setSelectedMatrix] = useState<Matrix>('PERSONAL')
   const [sortBy, setSortBy] = useState<'dueDate' | 'createdAt'>('dueDate')
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   useEffect(() => {
     loadTasks()
@@ -84,11 +85,27 @@ const App: React.FC = () => {
 
   return (
     <div className="app-layout">
-      <Sidebar selected={selectedMatrix} onChange={(m) => setSelectedMatrix(m)} />
+      <Sidebar
+        selected={selectedMatrix}
+        onChange={setSelectedMatrix}
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
       <div className="app-content">
         <div className="app">
           <header className="app-header">
-            <h1 className="app-title">Matriz de Eisenhower</h1>
+            <div className="app-header__top">
+              <button
+                className="hamburger"
+                onClick={() => setSidebarOpen((prev) => !prev)}
+                aria-label="Abrir menu"
+              >
+                <span />
+                <span />
+                <span />
+              </button>
+              <h1 className="app-title">Matriz de Eisenhower</h1>
+            </div>
             <div className="sort-controls">
               <span className="sort-controls__label">Ordenar por:</span>
               <button
