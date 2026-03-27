@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Quadrant as QuadrantType, Task } from '../types/Task'
 import TaskCard from './TaskCard'
 
@@ -10,6 +10,7 @@ interface QuadrantProps {
   onComplete: (id: string) => void
   onDelete: (id: string) => void
   onAddTask: (quadrant: QuadrantType) => void
+  onMoveTask: (taskId: string, targetQuadrant: QuadrantType) => void
 }
 
 const QuadrantComponent: React.FC<QuadrantProps> = ({
@@ -20,11 +21,17 @@ const QuadrantComponent: React.FC<QuadrantProps> = ({
   onComplete,
   onDelete,
   onAddTask,
+  onMoveTask,
 }) => {
+  const [isDragOver, setIsDragOver] = useState(false)
+
   return (
     <div
-      className="quadrant"
+      className={`quadrant${isDragOver ? ' quadrant--drag-over' : ''}`}
       style={{ borderTop: `4px solid ${color}` }}
+      onDragOver={(e) => { e.preventDefault(); setIsDragOver(true) }}
+      onDragLeave={() => setIsDragOver(false)}
+      onDrop={(e) => { e.preventDefault(); setIsDragOver(false); const id = e.dataTransfer.getData('taskId'); if (id) onMoveTask(id, quadrant) }}
     >
       <div className="quadrant__header">
         <h2 className="quadrant__title" style={{ color }}>

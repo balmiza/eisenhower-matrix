@@ -60,6 +60,17 @@ public class TaskController {
         return ResponseEntity.ok(task);
     }
 
+    @Operation(summary = "Mover tarefa", description = "Move uma tarefa para outro quadrante")
+    @ApiResponse(responseCode = "200", description = "Tarefa movida")
+    @ApiResponse(responseCode = "404", description = "Tarefa não encontrada")
+    @PatchMapping("/{id}/move")
+    public ResponseEntity<Task> moveTask(
+            @Parameter(description = "ID da tarefa") @PathVariable UUID id,
+            @Parameter(description = "Quadrante destino (Q1, Q2, Q3, Q4)") @RequestParam Quadrant quadrant) {
+        Task task = taskService.moveTask(id, quadrant);
+        return ResponseEntity.ok(task);
+    }
+
     @Operation(summary = "Deletar tarefa", description = "Remove uma tarefa permanentemente")
     @ApiResponse(responseCode = "204", description = "Tarefa deletada")
     @ApiResponse(responseCode = "404", description = "Tarefa não encontrada")

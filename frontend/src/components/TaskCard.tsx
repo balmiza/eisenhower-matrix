@@ -24,7 +24,9 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onComplete, onDelete }) => {
   return (
     <div
       className={`task-card ${isDone ? 'task-card--done' : ''} ${isOverdue ? 'task-card--overdue' : ''}`}
-      style={{ opacity: isDone ? 0.6 : 1 }}
+      style={{ opacity: isDone ? 0.6 : 1, cursor: isDone ? 'default' : 'grab' }}
+      draggable={!isDone}
+      onDragStart={(e) => { if (!isDone) { e.dataTransfer.setData('taskId', task.id) } }}
     >
       <div className="task-card__content">
         <h4
