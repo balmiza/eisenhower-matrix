@@ -1,6 +1,7 @@
 services:
   - type: web
     name: eisenhower-matrix-api
+    branch: main
     env: docker
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
