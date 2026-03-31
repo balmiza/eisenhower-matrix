@@ -5,7 +5,8 @@ import QuadrantComponent from './components/Quadrant'
 import AddTaskModal from './components/AddTaskModal'
 import Toast, { ToastMessage, ToastType } from './components/Toast'
 import ConfirmModal from './components/ConfirmModal'
-import Sidebar from './components/Sidebar'
+import Sidebar, { Page } from './components/Sidebar'
+import PdiPage from './pages/PdiPage'
 import './App.css'
 
 const QUADRANTS: { key: Quadrant; title: string; color: string }[] = [
@@ -16,6 +17,7 @@ const QUADRANTS: { key: Quadrant; title: string; color: string }[] = [
 ]
 
 const App: React.FC = () => {
+  const [activePage, setActivePage] = useState<Page>('tasks')
   const [tasks, setTasks] = useState<Task[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -33,8 +35,8 @@ const App: React.FC = () => {
   const dismissToast = (id: number) => setToasts((prev) => prev.filter((t) => t.id !== id))
 
   useEffect(() => {
-    loadTasks()
-  }, [selectedMatrix])
+    if (activePage === 'tasks') loadTasks()
+  }, [selectedMatrix, activePage])
 
   const loadTasks = async () => {
     try {
@@ -102,80 +104,83 @@ const App: React.FC = () => {
     })
   }
 
-  if (loading) {
-    return (
-      <div className="app-loading">
-        <p>Carregando tarefas...</p>
-      </div>
-    )
-  }
-
   return (
     <div className="app-layout">
       <Sidebar
-        selected={selectedMatrix}
-        onChange={setSelectedMatrix}
+        activePage={activePage}
+        onNavigate={setActivePage}
+        selectedMatrix={selectedMatrix}
+        onMatrixChange={setSelectedMatrix}
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
       />
+
       <div className="app-content">
-        <div className="app">
-          <header className="app-header">
-            <div className="app-header__top">
-              <button
-                className="hamburger"
-                onClick={() => setSidebarOpen((prev) => !prev)}
-                aria-label="Abrir menu"
-              >
-                <span />
-                <span />
-                <span />
-              </button>
-              <h1 className="app-title">Matriz de Eisenhower</h1>
-            </div>
-            <div className="sort-controls">
-              <span className="sort-controls__label">Ordenar por:</span>
-              <button
-                className={`sort-controls__btn ${sortBy === 'dueDate' ? 'sort-controls__btn--active' : ''}`}
-                onClick={() => setSortBy('dueDate')}
-              >
-                Data Limite
-              </button>
-              <button
-                className={`sort-controls__btn ${sortBy === 'createdAt' ? 'sort-controls__btn--active' : ''}`}
-                onClick={() => setSortBy('createdAt')}
-              >
-                Data de Criação
-              </button>
-            </div>
-            {error && <p className="app-error">{error}</p>}
-          </header>
+        {activePage === 'pdi' ? (
+          <PdiPage />
+        ) : (
+          <div className="app">
+            <header className="app-header">
+              <div className="app-header__top">
+                <button
+                  className="hamburger"
+                  onClick={() => setSidebarOpen((prev) => !prev)}
+                  aria-label="Abrir menu"
+                >
+                  <span />
+                  <span />
+                  <span />
+                </button>
+                <h1 className="app-title">Matriz de Eisenhower</h1>
+              </div>
+              <div className="sort-controls">
+                <span className="sort-controls__label">Ordenar por:</span>
+                <button
+                  className={`sort-controls__btn ${sortBy === 'dueDate' ? 'sort-controls__btn--active' : ''}`}
+                  onClick={() => setSortBy('dueDate')}
+                >
+                  Data Limite
+                </button>
+                <button
+                  className={`sort-controls__btn ${sortBy === 'createdAt' ? 'sort-controls__btn--active' : ''}`}
+                  onClick={() => setSortBy('createdAt')}
+                >
+                  Data de Criação
+                </button>
+              </div>
+              {error && <p className="app-error">{error}</p>}
+            </header>
 
-          <main className="matrix-grid">
-            {QUADRANTS.map(({ key, title, color }) => (
-              <QuadrantComponent
-                key={key}
-                quadrant={key}
-                title={title}
-                color={color}
-                tasks={getTasksByQuadrant(key)}
-                onComplete={handleCompleteTask}
-                onDelete={handleDeleteTask}
-                onAddTask={setModalQuadrant}
-                onMoveTask={handleMoveTask}
+            {loading ? (
+              <div className="app-loading"><p>Carregando tarefas...</p></div>
+            ) : (
+              <main className="matrix-grid">
+                {QUADRANTS.map(({ key, title, color }) => (
+                  <QuadrantComponent
+                    key={key}
+                    quadrant={key}
+                    title={title}
+                    color={color}
+                    tasks={getTasksByQuadrant(key)}
+                    onComplete={handleCompleteTask}
+                    onDelete={handleDeleteTask}
+                    onAddTask={setModalQuadrant}
+                    onMoveTask={handleMoveTask}
+                  />
+                ))}
+              </main>
+            )}
+
+            {modalQuadrant && (
+              <AddTaskModal
+                quadrant={modalQuadrant}
+                matrix={selectedMatrix}
+                onAdd={handleAddTask}
+                onClose={() => setModalQuadrant(null)}
               />
-            ))}
-          </main>
-
-          {modalQuadrant && (
-            <AddTaskModal
-              quadrant={modalQuadrant}
-              matrix={selectedMatrix}
-              onAdd={handleAddTask}
-              onClose={() => setModalQuadrant(null)}
-            />
-          )}
-        </div>
+            )}
+          </div>
+        )}
       </div>
 
       <Toast toasts={toasts} onDismiss={dismissToast} />

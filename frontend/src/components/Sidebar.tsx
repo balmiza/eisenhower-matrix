@@ -1,16 +1,32 @@
 import React from 'react'
 import { Matrix } from '../types/Task'
 
+export type Page = 'tasks' | 'pdi'
+
 interface SidebarProps {
-  selected: Matrix
-  onChange: (matrix: Matrix) => void
+  activePage: Page
+  onNavigate: (page: Page) => void
+  selectedMatrix: Matrix
+  onMatrixChange: (matrix: Matrix) => void
   isOpen: boolean
   onClose: () => void
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ selected, onChange, isOpen, onClose }) => {
-  const handleSelect = (matrix: Matrix) => {
-    onChange(matrix)
+const Sidebar: React.FC<SidebarProps> = ({
+  activePage,
+  onNavigate,
+  selectedMatrix,
+  onMatrixChange,
+  isOpen,
+  onClose,
+}) => {
+  const handleNavigate = (page: Page) => {
+    onNavigate(page)
+    onClose()
+  }
+
+  const handleMatrixChange = (matrix: Matrix) => {
+    onMatrixChange(matrix)
     onClose()
   }
 
@@ -18,18 +34,39 @@ const Sidebar: React.FC<SidebarProps> = ({ selected, onChange, isOpen, onClose }
     <>
       {isOpen && <div className="sidebar-overlay" onClick={onClose} />}
       <nav className={`sidebar ${isOpen ? 'sidebar--open' : ''}`}>
-        <h2 className="sidebar__title">Matrizes</h2>
+        <h2 className="sidebar__title">Performance</h2>
+
+        <p className="sidebar__section">Produtividade</p>
         <button
-          className={`sidebar__item ${selected === 'PERSONAL' ? 'sidebar__item--active' : ''}`}
-          onClick={() => handleSelect('PERSONAL')}
+          className={`sidebar__item ${activePage === 'tasks' ? 'sidebar__item--active' : ''}`}
+          onClick={() => handleNavigate('tasks')}
         >
-          🏠 Pessoal
+          📋 Matriz de Eisenhower
         </button>
+
+        {activePage === 'tasks' && (
+          <div className="sidebar__sub">
+            <button
+              className={`sidebar__subitem ${selectedMatrix === 'PERSONAL' ? 'sidebar__subitem--active' : ''}`}
+              onClick={() => handleMatrixChange('PERSONAL')}
+            >
+              🏠 Pessoal
+            </button>
+            <button
+              className={`sidebar__subitem ${selectedMatrix === 'WORK' ? 'sidebar__subitem--active' : ''}`}
+              onClick={() => handleMatrixChange('WORK')}
+            >
+              💼 Trabalho
+            </button>
+          </div>
+        )}
+
+        <p className="sidebar__section">Desenvolvimento</p>
         <button
-          className={`sidebar__item ${selected === 'WORK' ? 'sidebar__item--active' : ''}`}
-          onClick={() => handleSelect('WORK')}
+          className={`sidebar__item ${activePage === 'pdi' ? 'sidebar__item--active' : ''}`}
+          onClick={() => handleNavigate('pdi')}
         >
-          💼 Trabalho
+          🎯 PDI
         </button>
       </nav>
     </>
