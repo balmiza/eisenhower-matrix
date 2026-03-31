@@ -49,7 +49,7 @@ const GoalCard: React.FC<GoalCardProps> = ({ goal, onEdit, onDelete }) => {
       </div>
 
       <div className="goal-card__footer">
-        <span className={`goal-card__status goal-card__status--${goal.status.toLowerCase().replaceAll('_', '-')}`}>
+        <span className={`goal-card__status goal-card__status--${goal.status.toLowerCase().replace(/_/g, '-')}`}>
           {STATUS_LABEL[goal.status]}
         </span>
         <div className="goal-card__actions">
