@@ -7,6 +7,7 @@ import Toast, { ToastMessage, ToastType } from './components/Toast'
 import ConfirmModal from './components/ConfirmModal'
 import Sidebar, { Page } from './components/Sidebar'
 import PdiPage from './pages/PdiPage'
+import JournalPage from './pages/JournalPage'
 import './App.css'
 
 const QUADRANTS: { key: Quadrant; title: string; color: string }[] = [
@@ -116,7 +117,9 @@ const App: React.FC = () => {
       />
 
       <div className="app-content">
-        {activePage === 'pdi' ? (
+        {activePage === 'journal' ? (
+          <JournalPage />
+        ) : activePage === 'pdi' ? (
           <PdiPage />
         ) : (
           <div className="app">
