@@ -7,6 +7,8 @@ import Toast, { ToastMessage, ToastType } from './components/Toast'
 import ConfirmModal from './components/ConfirmModal'
 import Sidebar, { Page } from './components/Sidebar'
 import PdiPage from './pages/PdiPage'
+import BooksPage from './pages/BooksPage'
+import OneOnOnePage from './pages/OneOnOnePage'
 import './App.css'
 
 const QUADRANTS: { key: Quadrant; title: string; color: string }[] = [
@@ -118,6 +120,10 @@ const App: React.FC = () => {
       <div className="app-content">
         {activePage === 'pdi' ? (
           <PdiPage />
+        ) : activePage === 'books' ? (
+          <BooksPage />
+        ) : activePage === 'one-on-ones' ? (
+          <OneOnOnePage />
         ) : (
           <div className="app">
             <header className="app-header">

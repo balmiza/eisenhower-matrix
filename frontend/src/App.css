@@ -785,6 +785,331 @@ body {
   .modal__form-row { grid-template-columns: 1fr; }
 }
 
+/* === Books Page === */
+.books-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 28px 32px;
+  min-height: 100%;
+}
+
+.books-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.books-header__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.books-header__subtitle {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+/* === Books Summary === */
+.books-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.books-summary__card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.books-summary__label { font-size: 12px; color: #6b7280; }
+.books-summary__value { font-size: 28px; font-weight: 700; }
+.books-summary__value--indigo { color: #6366f1; }
+.books-summary__value--green  { color: #16a34a; }
+.books-summary__value--yellow { color: #ca8a04; }
+.books-summary__value--slate  { color: #9ca3af; }
+
+/* === Books List === */
+.books-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.books-empty {
+  font-size: 13px;
+  color: #9ca3af;
+  padding: 16px 0;
+  grid-column: 1 / -1;
+}
+
+/* === Book Card === */
+.book-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  transition: box-shadow 0.15s;
+}
+
+.book-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
+.book-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.book-card__title {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.4;
+}
+
+.book-card__author {
+  display: block;
+  font-size: 13px;
+  color: #6b7280;
+  margin-top: 2px;
+}
+
+.book-card__status-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.book-card__status-badge--want-to-read { background: #dbeafe; color: #1d4ed8; }
+.book-card__status-badge--reading      { background: #fef9c3; color: #854d0e; }
+.book-card__status-badge--read         { background: #dcfce7; color: #166534; }
+
+.book-card__category {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.book-card__rating {
+  font-size: 13px;
+}
+
+.book-card__main-points {
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.book-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2px;
+}
+
+.book-card__date { font-size: 12px; color: #9ca3af; }
+
+.book-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.book-card__btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.15s;
+  line-height: 1;
+}
+
+.book-card__btn:hover { background: #f3f4f6; }
+
+/* === Books Responsive === */
+@media (max-width: 768px) {
+  .books-page { padding: 20px 16px; }
+  .books-summary { grid-template-columns: repeat(2, 1fr); }
+  .books-list { grid-template-columns: 1fr; }
+}
+
+/* === One-on-One Page === */
+.one-on-one-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 28px 32px;
+  min-height: 100%;
+}
+
+.one-on-one-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.one-on-one-header__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.one-on-one-header__subtitle {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+/* === One-on-One Summary === */
+.one-on-one-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.one-on-one-summary__card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.one-on-one-summary__label { font-size: 12px; color: #6b7280; }
+.one-on-one-summary__value { font-size: 28px; font-weight: 700; }
+.one-on-one-summary__value--indigo { color: #6366f1; }
+
+/* === One-on-One List === */
+.one-on-one-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.one-on-one-empty {
+  font-size: 13px;
+  color: #9ca3af;
+  padding: 16px 0;
+}
+
+/* === One-on-One Card === */
+.one-on-one-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  transition: box-shadow 0.15s;
+}
+
+.one-on-one-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
+.one-on-one-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.one-on-one-card__date {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+  text-transform: capitalize;
+}
+
+.one-on-one-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.one-on-one-card__btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.15s;
+  line-height: 1;
+}
+
+.one-on-one-card__btn:hover { background: #f3f4f6; }
+
+.one-on-one-card__manager {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.one-on-one-card__manager-icon { font-size: 14px; }
+
+.one-on-one-card__manager-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.one-on-one-card__section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 8px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.one-on-one-card__section-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.one-on-one-card__section-text {
+  font-size: 13px;
+  color: #374151;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+/* === One-on-One Responsive === */
+@media (max-width: 768px) {
+  .one-on-one-page { padding: 20px 16px; }
+  .one-on-one-summary { grid-template-columns: repeat(2, 1fr); }
+}
+
 /* === Mobile responsiveness === */
 @media (max-width: 768px) {
   .hamburger {
