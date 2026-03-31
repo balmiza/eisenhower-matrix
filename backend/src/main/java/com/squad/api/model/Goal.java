@@ -7,16 +7,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "tasks")
+@Table(name = "goals")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Task {
+public class Goal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -31,25 +32,25 @@ public class Task {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Quadrant quadrant;
+    private GoalCategory category;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private GoalTimeframe timeframe;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @Builder.Default
-    private Status status = Status.PENDING;
+    private GoalStatus status = GoalStatus.NOT_STARTED;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @Builder.Default
-    private Matrix matrix = Matrix.PERSONAL;
+    private int progress = 0;
+
+    @Column(name = "due_date")
+    private LocalDate dueDate;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
-
-    @Column(name = "due_date")
-    private LocalDateTime dueDate;
-
-    @Column(name = "completed_at")
-    private LocalDateTime completedAt;
 }

@@ -2,6 +2,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import App from '../App'
 import * as api from '../services/api'
+import * as goalApi from '../services/goalApi'
 import { Task } from '../types/Task'
 
 jest.mock('../services/api', () => ({
@@ -10,6 +11,13 @@ jest.mock('../services/api', () => ({
   deleteTask: jest.fn(),
   moveTask: jest.fn(),
   createTask: jest.fn(),
+}))
+
+jest.mock('../services/goalApi', () => ({
+  getAllGoals: jest.fn(),
+  createGoal: jest.fn(),
+  updateGoal: jest.fn(),
+  deleteGoal: jest.fn(),
 }))
 
 const makeTask = (overrides: Partial<Task> = {}): Task => ({
@@ -29,12 +37,14 @@ describe('App', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     ;(api.getAllTasks as jest.Mock).mockResolvedValue([])
+    ;(goalApi.getAllGoals as jest.Mock).mockResolvedValue([])
   })
 
-  it('exibe estado de carregamento antes de buscar tarefas', () => {
-    ;(api.getAllTasks as jest.Mock).mockReturnValueOnce(new Promise(() => {}))
+  it('renderiza na página de tasks por padrão', async () => {
     render(<App />)
-    expect(screen.getByText(/Carregando tarefas/)).toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.getAllByText(/Matriz de Eisenhower/).length).toBeGreaterThanOrEqual(1)
+    })
   })
 
   it('renderiza os quatro quadrantes após carregar', async () => {
@@ -50,9 +60,7 @@ describe('App', () => {
   it('exibe mensagem de erro quando API falha', async () => {
     ;(api.getAllTasks as jest.Mock).mockRejectedValueOnce(new Error('Network error'))
     render(<App />)
-    expect(
-      await screen.findByText(/Erro ao carregar tarefas/)
-    ).toBeInTheDocument()
+    expect(await screen.findByText(/Erro ao carregar tarefas/)).toBeInTheDocument()
   })
 
   it('renderiza tarefas nas colunas corretas', async () => {
@@ -80,19 +88,16 @@ describe('App', () => {
 
   it('recarrega tarefas ao trocar de matriz na sidebar', async () => {
     render(<App />)
-    await waitFor(() => screen.getByLabelText('Abrir menu'))
-    fireEvent.click(screen.getByLabelText('Abrir menu'))
+    await waitFor(() => screen.getByText(/Trabalho/))
     fireEvent.click(screen.getByText(/Trabalho/))
     await waitFor(() => expect(api.getAllTasks).toHaveBeenCalledWith('WORK'))
   })
 
-  it('abre sidebar ao clicar no botão hamburger', async () => {
+  it('navega para a página de PDI ao clicar no menu', async () => {
     render(<App />)
-    await waitFor(() => screen.getByLabelText('Abrir menu'))
-    const { container } = render(<App />)
-    await waitFor(() => screen.getByLabelText('Abrir menu'))
-    fireEvent.click(container.querySelector('.hamburger')!)
-    expect(container.querySelector('.sidebar--open')).toBeInTheDocument()
+    await waitFor(() => screen.getByText(/PDI/))
+    fireEvent.click(screen.getByText(/PDI/))
+    expect(await screen.findByText('Plano de Desenvolvimento Individual')).toBeInTheDocument()
   })
 
   it('completa tarefa e exibe toast de sucesso', async () => {
