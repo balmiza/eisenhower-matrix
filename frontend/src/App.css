@@ -742,8 +742,6 @@ body {
 .goal-card__status--in-progress::before { background: #facc15; }
 .goal-card__status--done::before        { background: #4ade80; }
 .goal-card__status--not-started::before { background: #d1d5db; }
-.goal-card__status--not_started::before { background: #d1d5db; }
-.goal-card__status--in_progress::before { background: #facc15; }
 
 .goal-card__actions {
   display: flex;

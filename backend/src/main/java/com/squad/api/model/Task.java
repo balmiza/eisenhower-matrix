@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import com.squad.api.model.Matrix;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
