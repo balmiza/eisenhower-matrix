@@ -31,7 +31,7 @@ const BookCard: React.FC<BookCardProps> = ({ book, onEdit, onDelete }) => {
   return (
     <div className="book-card">
       <div className="book-card__top">
-        <div>
+        <div className="book-card__info">
           <span className="book-card__title">{book.title}</span>
           <span className="book-card__author">{book.author}</span>
         </div>
@@ -53,7 +53,7 @@ const BookCard: React.FC<BookCardProps> = ({ book, onEdit, onDelete }) => {
       <div className="book-card__footer">
         {book.readingDate && (
           <span className="book-card__date">
-            {new Date(book.readingDate).toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' })}
+            {new Date(book.readingDate + 'T00:00:00').toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' })}
           </span>
         )}
         <div className="book-card__actions">
