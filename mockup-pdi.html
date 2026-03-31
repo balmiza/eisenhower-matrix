@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mockup — PDI</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 220px;
+      background: #1e293b;
+      padding: 24px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      border-right: 1px solid #334155;
+      flex-shrink: 0;
+    }
+
+    .sidebar__logo {
+      font-size: 14px;
+      font-weight: 700;
+      color: #94a3b8;
+      padding: 0 20px 20px;
+      border-bottom: 1px solid #334155;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .sidebar__item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      font-size: 14px;
+      color: #94a3b8;
+      cursor: pointer;
+      border-radius: 0;
+      transition: background 0.15s;
+    }
+
+    .sidebar__item:hover { background: #334155; color: #e2e8f0; }
+    .sidebar__item--active { background: #334155; color: #fff; font-weight: 600; border-left: 3px solid #6366f1; }
+
+    .sidebar__section {
+      font-size: 11px;
+      color: #475569;
+      padding: 16px 20px 4px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* MAIN */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .header {
+      background: #1e293b;
+      border-bottom: 1px solid #334155;
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header__title { font-size: 20px; font-weight: 700; }
+    .header__subtitle { font-size: 13px; color: #64748b; margin-top: 2px; }
+
+    .btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: none;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn--primary { background: #6366f1; color: #fff; }
+
+    /* CONTENT */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* PRAZO SECTIONS */
+    .prazo-section { display: flex; flex-direction: column; gap: 12px; }
+
+    .prazo-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .prazo-badge {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .prazo-badge--curto  { background: #dcfce7; color: #166534; }
+    .prazo-badge--medio  { background: #fef9c3; color: #854d0e; }
+    .prazo-badge--longo  { background: #ede9fe; color: #5b21b6; }
+
+    .prazo-label { font-size: 13px; color: #64748b; }
+
+    /* META CARDS */
+    .metas-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+    }
+
+    .meta-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .meta-card__top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .meta-card__title { font-size: 15px; font-weight: 600; line-height: 1.4; }
+
+    .categoria-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    .categoria-badge--tecnica       { background: #0ea5e920; color: #38bdf8; }
+    .categoria-badge--comportamental { background: #f97316 20; color: #fb923c; }
+    .categoria-badge--lideranca     { background: #a855f720; color: #c084fc; }
+
+    .meta-card__desc { font-size: 13px; color: #94a3b8; line-height: 1.5; }
+
+    .progress-wrap { display: flex; flex-direction: column; gap: 6px; }
+
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    .progress-bar {
+      height: 6px;
+      background: #334155;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-bar__fill {
+      height: 100%;
+      border-radius: 999px;
+      background: #6366f1;
+    }
+
+    .meta-card__footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .status-dot {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    .status-dot::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .status-dot--andamento::before { background: #facc15; }
+    .status-dot--concluida::before { background: #4ade80; }
+    .status-dot--nao-iniciada::before { background: #475569; }
+
+    .meta-card__date { font-size: 12px; color: #475569; }
+
+    /* EMPTY */
+    .empty {
+      background: #1e293b;
+      border: 1px dashed #334155;
+      border-radius: 12px;
+      padding: 20px;
+      font-size: 13px;
+      color: #475569;
+      text-align: center;
+    }
+
+    /* RESUMO TOPO */
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .summary-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 16px 20px;
+    }
+
+    .summary-card__label { font-size: 12px; color: #64748b; margin-bottom: 6px; }
+    .summary-card__value { font-size: 24px; font-weight: 700; }
+    .summary-card__value--indigo { color: #818cf8; }
+    .summary-card__value--green  { color: #4ade80; }
+    .summary-card__value--yellow { color: #facc15; }
+    .summary-card__value--slate  { color: #94a3b8; }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar__logo">Performance</div>
+
+    <div class="sidebar__section">Produtividade</div>
+    <div class="sidebar__item">📋 Matriz de Eisenhower</div>
+
+    <div class="sidebar__section">Desenvolvimento</div>
+    <div class="sidebar__item sidebar__item--active">🎯 PDI</div>
+    <div class="sidebar__item">📚 Livros</div>
+    <div class="sidebar__item">🏆 Conquistas</div>
+    <div class="sidebar__item">🎓 Certificações</div>
+
+    <div class="sidebar__section">Reflexão</div>
+    <div class="sidebar__item">📝 Diário de Bordo</div>
+    <div class="sidebar__item">💬 Feedbacks</div>
+    <div class="sidebar__item">🤝 1:1s</div>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="header">
+      <div>
+        <div class="header__title">Plano de Desenvolvimento Individual</div>
+        <div class="header__subtitle">Acompanhe suas metas de carreira</div>
+      </div>
+      <button class="btn btn--primary">+ Nova Meta</button>
+    </div>
+
+    <div class="content">
+
+      <!-- RESUMO -->
+      <div class="summary">
+        <div class="summary-card">
+          <div class="summary-card__label">Total de metas</div>
+          <div class="summary-card__value summary-card__value--indigo">6</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-card__label">Concluídas</div>
+          <div class="summary-card__value summary-card__value--green">2</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-card__label">Em andamento</div>
+          <div class="summary-card__value summary-card__value--yellow">3</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-card__label">Não iniciadas</div>
+          <div class="summary-card__value summary-card__value--slate">1</div>
+        </div>
+      </div>
+
+      <!-- CURTO PRAZO -->
+      <div class="prazo-section">
+        <div class="prazo-header">
+          <span class="prazo-badge prazo-badge--curto">Curto prazo</span>
+          <span class="prazo-label">até 6 meses</span>
+        </div>
+        <div class="metas-grid">
+
+          <div class="meta-card">
+            <div class="meta-card__top">
+              <div class="meta-card__title">Dominar React avançado</div>
+              <span class="categoria-badge categoria-badge--tecnica">Técnica</span>
+            </div>
+            <div class="meta-card__desc">Aprofundar em hooks, performance e patterns modernos do React.</div>
+            <div class="progress-wrap">
+              <div class="progress-top"><span>Progresso</span><span>70%</span></div>
+              <div class="progress-bar"><div class="progress-bar__fill" style="width:70%"></div></div>
+            </div>
+            <div class="meta-card__footer">
+              <span class="status-dot status-dot--andamento">Em andamento</span>
+              <span class="meta-card__date">até Jun 2025</span>
+            </div>
+          </div>
+
+          <div class="meta-card">
+            <div class="meta-card__top">
+              <div class="meta-card__title">Melhorar comunicação em apresentações</div>
+              <span class="categoria-badge categoria-badge--comportamental">Comportamental</span>
+            </div>
+            <div class="meta-card__desc">Apresentar ao menos 2 projetos para o time até o final do semestre.</div>
+            <div class="progress-wrap">
+              <div class="progress-top"><span>Progresso</span><span>50%</span></div>
+              <div class="progress-bar"><div class="progress-bar__fill" style="width:50%"></div></div>
+            </div>
+            <div class="meta-card__footer">
+              <span class="status-dot status-dot--andamento">Em andamento</span>
+              <span class="meta-card__date">até Jul 2025</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- MÉDIO PRAZO -->
+      <div class="prazo-section">
+        <div class="prazo-header">
+          <span class="prazo-badge prazo-badge--medio">Médio prazo</span>
+          <span class="prazo-label">6 meses a 2 anos</span>
+        </div>
+        <div class="metas-grid">
+
+          <div class="meta-card">
+            <div class="meta-card__top">
+              <div class="meta-card__title">Conquistar certificação AWS</div>
+              <span class="categoria-badge categoria-badge--tecnica">Técnica</span>
+            </div>
+            <div class="meta-card__desc">Obter a certificação AWS Solutions Architect Associate.</div>
+            <div class="progress-wrap">
+              <div class="progress-top"><span>Progresso</span><span>20%</span></div>
+              <div class="progress-bar"><div class="progress-bar__fill" style="width:20%"></div></div>
+            </div>
+            <div class="meta-card__footer">
+              <span class="status-dot status-dot--andamento">Em andamento</span>
+              <span class="meta-card__date">até Dez 2025</span>
+            </div>
+          </div>
+
+          <div class="meta-card">
+            <div class="meta-card__top">
+              <div class="meta-card__title">Liderar um projeto do início ao fim</div>
+              <span class="categoria-badge categoria-badge--lideranca">Liderança</span>
+            </div>
+            <div class="meta-card__desc">Assumir ownership completo de um projeto com pelo menos 2 pessoas no time.</div>
+            <div class="progress-wrap">
+              <div class="progress-top"><span>Progresso</span><span>0%</span></div>
+              <div class="progress-bar"><div class="progress-bar__fill" style="width:0%"></div></div>
+            </div>
+            <div class="meta-card__footer">
+              <span class="status-dot status-dot--nao-iniciada">Não iniciada</span>
+              <span class="meta-card__date">até Mar 2026</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- LONGO PRAZO -->
+      <div class="prazo-section">
+        <div class="prazo-header">
+          <span class="prazo-badge prazo-badge--longo">Longo prazo</span>
+          <span class="prazo-label">2+ anos</span>
+        </div>
+        <div class="metas-grid">
+
+          <div class="meta-card">
+            <div class="meta-card__top">
+              <div class="meta-card__title">Tornar-me Tech Lead</div>
+              <span class="categoria-badge categoria-badge--lideranca">Liderança</span>
+            </div>
+            <div class="meta-card__desc">Assumir papel de referência técnica no time, com responsabilidades de mentoria e arquitetura.</div>
+            <div class="progress-wrap">
+              <div class="progress-top"><span>Progresso</span><span>100%</span></div>
+              <div class="progress-bar"><div class="progress-bar__fill" style="width:100%; background:#4ade80"></div></div>
+            </div>
+            <div class="meta-card__footer">
+              <span class="status-dot status-dot--concluida">Concluída</span>
+              <span class="meta-card__date">até Dez 2027</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
