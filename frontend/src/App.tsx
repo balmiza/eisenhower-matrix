@@ -7,6 +7,7 @@ import Toast, { ToastMessage, ToastType } from './components/Toast'
 import ConfirmModal from './components/ConfirmModal'
 import Sidebar, { Page } from './components/Sidebar'
 import PdiPage from './pages/PdiPage'
+import BooksPage from './pages/BooksPage'
 import JournalPage from './pages/JournalPage'
 import './App.css'
 
@@ -121,6 +122,8 @@ const App: React.FC = () => {
           <JournalPage />
         ) : activePage === 'pdi' ? (
           <PdiPage />
+        ) : activePage === 'books' ? (
+          <BooksPage />
         ) : (
           <div className="app">
             <header className="app-header">
