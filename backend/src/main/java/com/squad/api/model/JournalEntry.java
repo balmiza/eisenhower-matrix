@@ -37,4 +37,7 @@ public class JournalEntry {
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    @Column(name = "user_id", nullable = false)
+    private String userId;
 }

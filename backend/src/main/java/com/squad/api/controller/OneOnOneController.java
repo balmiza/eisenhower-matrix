@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,14 +31,16 @@ public class OneOnOneController {
     @ApiResponse(responseCode = "400", description = "Dados inválidos")
     @PostMapping
     public ResponseEntity<OneOnOne> createOneOnOne(@Valid @RequestBody OneOnOneRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(oneOnOneService.createOneOnOne(request));
+        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.status(HttpStatus.CREATED).body(oneOnOneService.createOneOnOne(request, userId));
     }
 
     @Operation(summary = "Listar reuniões 1:1", description = "Retorna todas as reuniões ordenadas por data")
     @ApiResponse(responseCode = "200", description = "Lista de reuniões")
     @GetMapping
     public ResponseEntity<List<OneOnOne>> getAllOneOnOnes() {
-        return ResponseEntity.ok(oneOnOneService.getAllOneOnOnes());
+        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.ok(oneOnOneService.getAllOneOnOnes(userId));
     }
 
     @Operation(summary = "Atualizar reunião 1:1", description = "Atualiza todos os campos de uma reunião")
@@ -47,7 +50,8 @@ public class OneOnOneController {
     public ResponseEntity<OneOnOne> updateOneOnOne(
             @Parameter(description = "ID da reunião") @PathVariable UUID id,
             @Valid @RequestBody OneOnOneRequest request) {
-        return ResponseEntity.ok(oneOnOneService.updateOneOnOne(id, request));
+        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.ok(oneOnOneService.updateOneOnOne(id, request, userId));
     }
 
     @Operation(summary = "Deletar reunião 1:1", description = "Remove uma reunião permanentemente")
@@ -56,7 +60,8 @@ public class OneOnOneController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOneOnOne(
             @Parameter(description = "ID da reunião") @PathVariable UUID id) {
-        oneOnOneService.deleteOneOnOne(id);
+        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        oneOnOneService.deleteOneOnOne(id, userId);
         return ResponseEntity.noContent().build();
     }
 }

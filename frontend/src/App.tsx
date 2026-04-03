@@ -10,6 +10,8 @@ import PdiPage from './pages/PdiPage'
 import BooksPage from './pages/BooksPage'
 import JournalPage from './pages/JournalPage'
 import OneOnOnePage from './pages/OneOnOnePage'
+import { useAuth } from './contexts/AuthContext'
+import LoginPage from './pages/LoginPage'
 import './App.css'
 
 const QUADRANTS: { key: Quadrant; title: string; color: string }[] = [
@@ -20,6 +22,7 @@ const QUADRANTS: { key: Quadrant; title: string; color: string }[] = [
 ]
 
 const App: React.FC = () => {
+  const { currentUser, loading: authLoading, signOut } = useAuth()
   const [activePage, setActivePage] = useState<Page>('tasks')
   const [tasks, setTasks] = useState<Task[]>([])
   const [loading, setLoading] = useState(true)
@@ -30,6 +33,14 @@ const App: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [toasts, setToasts] = useState<ToastMessage[]>([])
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
+
+  if (authLoading) {
+    return <div className="app-loading"><p>Carregando...</p></div>
+  }
+
+  if (!currentUser) {
+    return <LoginPage />
+  }
 
   const showToast = (message: string, type: ToastType) => {
     const id = Date.now()
@@ -141,6 +152,7 @@ const App: React.FC = () => {
                   <span />
                 </button>
                 <h1 className="app-title">Matriz de Eisenhower</h1>
+                <button className="logout-btn" onClick={signOut}>Sair</button>
               </div>
               <div className="sort-controls">
                 <span className="sort-controls__label">Ordenar por:</span>

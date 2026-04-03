@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,7 +33,8 @@ public class TaskController {
     @ApiResponse(responseCode = "400", description = "Dados inválidos")
     @PostMapping
     public ResponseEntity<Task> createTask(@Valid @RequestBody TaskRequest request) {
-        Task task = taskService.createTask(request);
+        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Task task = taskService.createTask(request, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(task);
     }
 
@@ -44,10 +46,11 @@ public class TaskController {
             @RequestParam(required = false) Quadrant quadrant,
             @Parameter(description = "Filtrar por matriz (PERSONAL ou WORK)")
             @RequestParam(required = false, defaultValue = "PERSONAL") Matrix matrix) {
+        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (quadrant != null) {
-            return ResponseEntity.ok(taskService.getTasksByQuadrantAndMatrix(quadrant, matrix));
+            return ResponseEntity.ok(taskService.getTasksByQuadrantAndMatrix(quadrant, matrix, userId));
         }
-        return ResponseEntity.ok(taskService.getAllTasksByMatrix(matrix));
+        return ResponseEntity.ok(taskService.getAllTasksByMatrix(matrix, userId));
     }
 
     @Operation(summary = "Concluir tarefa", description = "Marca uma tarefa como concluída")
@@ -56,7 +59,8 @@ public class TaskController {
     @PatchMapping("/{id}/complete")
     public ResponseEntity<Task> completeTask(
             @Parameter(description = "ID da tarefa") @PathVariable UUID id) {
-        Task task = taskService.completeTask(id);
+        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Task task = taskService.completeTask(id, userId);
         return ResponseEntity.ok(task);
     }
 
@@ -67,7 +71,8 @@ public class TaskController {
     public ResponseEntity<Task> moveTask(
             @Parameter(description = "ID da tarefa") @PathVariable UUID id,
             @Parameter(description = "Quadrante destino (Q1, Q2, Q3, Q4)") @RequestParam Quadrant quadrant) {
-        Task task = taskService.moveTask(id, quadrant);
+        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Task task = taskService.moveTask(id, quadrant, userId);
         return ResponseEntity.ok(task);
     }
 
@@ -77,7 +82,8 @@ public class TaskController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(
             @Parameter(description = "ID da tarefa") @PathVariable UUID id) {
-        taskService.deleteTask(id);
+        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        taskService.deleteTask(id, userId);
         return ResponseEntity.noContent().build();
     }
 }

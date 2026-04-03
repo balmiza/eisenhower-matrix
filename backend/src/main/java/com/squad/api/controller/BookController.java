@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,14 +31,16 @@ public class BookController {
     @ApiResponse(responseCode = "400", description = "Dados inválidos")
     @PostMapping
     public ResponseEntity<Book> createBook(@Valid @RequestBody BookRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(bookService.createBook(request));
+        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.status(HttpStatus.CREATED).body(bookService.createBook(request, userId));
     }
 
     @Operation(summary = "Listar livros", description = "Retorna todos os livros ordenados por status")
     @ApiResponse(responseCode = "200", description = "Lista de livros")
     @GetMapping
     public ResponseEntity<List<Book>> getAllBooks() {
-        return ResponseEntity.ok(bookService.getAllBooks());
+        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.ok(bookService.getAllBooks(userId));
     }
 
     @Operation(summary = "Atualizar livro", description = "Atualiza todos os campos de um livro")
@@ -47,7 +50,8 @@ public class BookController {
     public ResponseEntity<Book> updateBook(
             @Parameter(description = "ID do livro") @PathVariable UUID id,
             @Valid @RequestBody BookRequest request) {
-        return ResponseEntity.ok(bookService.updateBook(id, request));
+        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.ok(bookService.updateBook(id, request, userId));
     }
 
     @Operation(summary = "Deletar livro", description = "Remove um livro permanentemente")
@@ -56,7 +60,8 @@ public class BookController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBook(
             @Parameter(description = "ID do livro") @PathVariable UUID id) {
-        bookService.deleteBook(id);
+        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        bookService.deleteBook(id, userId);
         return ResponseEntity.noContent().build();
     }
 }
