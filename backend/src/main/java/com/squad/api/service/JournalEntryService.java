@@ -18,24 +18,28 @@ public class JournalEntryService {
     private final JournalEntryRepository journalEntryRepository;
 
     @Transactional
-    public JournalEntry createEntry(JournalEntryRequest request) {
+    public JournalEntry createEntry(JournalEntryRequest request, String userId) {
         JournalEntry entry = JournalEntry.builder()
                 .date(request.getDate())
                 .type(request.getType())
                 .content(request.getContent())
+                .userId(userId)
                 .build();
         return journalEntryRepository.save(entry);
     }
 
     @Transactional(readOnly = true)
-    public List<JournalEntry> getAllEntries() {
-        return journalEntryRepository.findAllOrderByDateDesc();
+    public List<JournalEntry> getAllEntries(String userId) {
+        return journalEntryRepository.findAllByUserIdOrderByDateDesc(userId);
     }
 
     @Transactional
-    public JournalEntry updateEntry(UUID id, JournalEntryRequest request) {
+    public JournalEntry updateEntry(UUID id, JournalEntryRequest request, String userId) {
         JournalEntry entry = journalEntryRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Journal entry not found with id: " + id));
+        if (!entry.getUserId().equals(userId)) {
+            throw new EntityNotFoundException("Journal entry not found with id: " + id);
+        }
         entry.setDate(request.getDate());
         entry.setType(request.getType());
         entry.setContent(request.getContent());
@@ -43,8 +47,10 @@ public class JournalEntryService {
     }
 
     @Transactional
-    public void deleteEntry(UUID id) {
-        if (!journalEntryRepository.existsById(id)) {
+    public void deleteEntry(UUID id, String userId) {
+        JournalEntry entry = journalEntryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Journal entry not found with id: " + id));
+        if (!entry.getUserId().equals(userId)) {
             throw new EntityNotFoundException("Journal entry not found with id: " + id);
         }
         journalEntryRepository.deleteById(id);

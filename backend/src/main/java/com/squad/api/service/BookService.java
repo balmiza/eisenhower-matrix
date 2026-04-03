@@ -19,7 +19,7 @@ public class BookService {
     private final BookRepository bookRepository;
 
     @Transactional
-    public Book createBook(BookRequest request) {
+    public Book createBook(BookRequest request, String userId) {
         Book book = Book.builder()
                 .title(request.getTitle())
                 .author(request.getAuthor())
@@ -28,19 +28,23 @@ public class BookService {
                 .rating(request.getRating())
                 .mainPoints(request.getMainPoints())
                 .readingDate(request.getReadingDate())
+                .userId(userId)
                 .build();
         return bookRepository.save(book);
     }
 
     @Transactional(readOnly = true)
-    public List<Book> getAllBooks() {
-        return bookRepository.findAllOrderByStatus();
+    public List<Book> getAllBooks(String userId) {
+        return bookRepository.findAllByUserIdOrderByStatus(userId);
     }
 
     @Transactional
-    public Book updateBook(UUID id, BookRequest request) {
+    public Book updateBook(UUID id, BookRequest request, String userId) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Book not found with id: " + id));
+        if (!book.getUserId().equals(userId)) {
+            throw new EntityNotFoundException("Book not found with id: " + id);
+        }
         book.setTitle(request.getTitle());
         book.setAuthor(request.getAuthor());
         book.setCategory(request.getCategory());
@@ -52,8 +56,10 @@ public class BookService {
     }
 
     @Transactional
-    public void deleteBook(UUID id) {
-        if (!bookRepository.existsById(id)) {
+    public void deleteBook(UUID id, String userId) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Book not found with id: " + id));
+        if (!book.getUserId().equals(userId)) {
             throw new EntityNotFoundException("Book not found with id: " + id);
         }
         bookRepository.deleteById(id);

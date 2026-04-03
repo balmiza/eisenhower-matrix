@@ -19,7 +19,7 @@ public class GoalService {
     private final GoalRepository goalRepository;
 
     @Transactional
-    public Goal createGoal(GoalRequest request) {
+    public Goal createGoal(GoalRequest request, String userId) {
         Goal goal = Goal.builder()
                 .title(request.getTitle())
                 .description(request.getDescription())
@@ -28,19 +28,23 @@ public class GoalService {
                 .status(request.getStatus() != null ? request.getStatus() : GoalStatus.NOT_STARTED)
                 .progress(request.getProgress())
                 .dueDate(request.getDueDate())
+                .userId(userId)
                 .build();
         return goalRepository.save(goal);
     }
 
     @Transactional(readOnly = true)
-    public List<Goal> getAllGoals() {
-        return goalRepository.findAllOrderByTimeframeAndDueDate();
+    public List<Goal> getAllGoals(String userId) {
+        return goalRepository.findAllByUserIdOrderByTimeframe(userId);
     }
 
     @Transactional
-    public Goal updateGoal(UUID id, GoalRequest request) {
+    public Goal updateGoal(UUID id, GoalRequest request, String userId) {
         Goal goal = goalRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Goal not found with id: " + id));
+        if (!goal.getUserId().equals(userId)) {
+            throw new EntityNotFoundException("Goal not found with id: " + id);
+        }
         goal.setTitle(request.getTitle());
         goal.setDescription(request.getDescription());
         goal.setCategory(request.getCategory());
@@ -52,8 +56,10 @@ public class GoalService {
     }
 
     @Transactional
-    public void deleteGoal(UUID id) {
-        if (!goalRepository.existsById(id)) {
+    public void deleteGoal(UUID id, String userId) {
+        Goal goal = goalRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Goal not found with id: " + id));
+        if (!goal.getUserId().equals(userId)) {
             throw new EntityNotFoundException("Goal not found with id: " + id);
         }
         goalRepository.deleteById(id);

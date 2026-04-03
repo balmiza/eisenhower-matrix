@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,14 +31,16 @@ public class GoalController {
     @ApiResponse(responseCode = "400", description = "Dados inválidos")
     @PostMapping
     public ResponseEntity<Goal> createGoal(@Valid @RequestBody GoalRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(goalService.createGoal(request));
+        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.status(HttpStatus.CREATED).body(goalService.createGoal(request, userId));
     }
 
     @Operation(summary = "Listar metas", description = "Retorna todas as metas ordenadas por prazo")
     @ApiResponse(responseCode = "200", description = "Lista de metas")
     @GetMapping
     public ResponseEntity<List<Goal>> getAllGoals() {
-        return ResponseEntity.ok(goalService.getAllGoals());
+        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.ok(goalService.getAllGoals(userId));
     }
 
     @Operation(summary = "Atualizar meta", description = "Atualiza todos os campos de uma meta")
@@ -47,7 +50,8 @@ public class GoalController {
     public ResponseEntity<Goal> updateGoal(
             @Parameter(description = "ID da meta") @PathVariable UUID id,
             @Valid @RequestBody GoalRequest request) {
-        return ResponseEntity.ok(goalService.updateGoal(id, request));
+        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.ok(goalService.updateGoal(id, request, userId));
     }
 
     @Operation(summary = "Deletar meta", description = "Remove uma meta permanentemente")
@@ -56,7 +60,8 @@ public class GoalController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteGoal(
             @Parameter(description = "ID da meta") @PathVariable UUID id) {
-        goalService.deleteGoal(id);
+        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        goalService.deleteGoal(id, userId);
         return ResponseEntity.noContent().build();
     }
 }
