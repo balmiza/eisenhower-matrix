@@ -9,6 +9,7 @@ import Sidebar, { Page } from './components/Sidebar'
 import PdiPage from './pages/PdiPage'
 import BooksPage from './pages/BooksPage'
 import JournalPage from './pages/JournalPage'
+import OneOnOnePage from './pages/OneOnOnePage'
 import './App.css'
 
 const QUADRANTS: { key: Quadrant; title: string; color: string }[] = [
@@ -124,6 +125,8 @@ const App: React.FC = () => {
           <PdiPage />
         ) : activePage === 'books' ? (
           <BooksPage />
+        ) : activePage === 'one-on-ones' ? (
+          <OneOnOnePage />
         ) : (
           <div className="app">
             <header className="app-header">

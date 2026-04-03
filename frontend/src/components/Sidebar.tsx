@@ -1,7 +1,7 @@
 import React from 'react'
 import { Matrix } from '../types/Task'
 
-export type Page = 'tasks' | 'pdi' | 'books' | 'journal'
+export type Page = 'tasks' | 'pdi' | 'books' | 'journal' | 'one-on-ones'
 
 interface SidebarProps {
   activePage: Page
@@ -81,6 +81,12 @@ const Sidebar: React.FC<SidebarProps> = ({
           onClick={() => handleNavigate('journal')}
         >
           📝 Diário de Bordo
+        </button>
+        <button
+          className={`sidebar__item ${activePage === 'one-on-ones' ? 'sidebar__item--active' : ''}`}
+          onClick={() => handleNavigate('one-on-ones')}
+        >
+          🤝 1:1s
         </button>
       </nav>
     </>
