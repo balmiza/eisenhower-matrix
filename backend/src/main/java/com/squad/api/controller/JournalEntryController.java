@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,14 +31,16 @@ public class JournalEntryController {
     @ApiResponse(responseCode = "400", description = "Dados inválidos")
     @PostMapping
     public ResponseEntity<JournalEntry> createEntry(@Valid @RequestBody JournalEntryRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(journalEntryService.createEntry(request));
+        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.status(HttpStatus.CREATED).body(journalEntryService.createEntry(request, userId));
     }
 
     @Operation(summary = "Listar entradas", description = "Retorna todas as entradas ordenadas por data")
     @ApiResponse(responseCode = "200", description = "Lista de entradas")
     @GetMapping
     public ResponseEntity<List<JournalEntry>> getAllEntries() {
-        return ResponseEntity.ok(journalEntryService.getAllEntries());
+        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.ok(journalEntryService.getAllEntries(userId));
     }
 
     @Operation(summary = "Atualizar entrada", description = "Atualiza todos os campos de uma entrada")
@@ -47,7 +50,8 @@ public class JournalEntryController {
     public ResponseEntity<JournalEntry> updateEntry(
             @Parameter(description = "ID da entrada") @PathVariable UUID id,
             @Valid @RequestBody JournalEntryRequest request) {
-        return ResponseEntity.ok(journalEntryService.updateEntry(id, request));
+        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.ok(journalEntryService.updateEntry(id, request, userId));
     }
 
     @Operation(summary = "Deletar entrada", description = "Remove uma entrada permanentemente")
@@ -56,7 +60,8 @@ public class JournalEntryController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEntry(
             @Parameter(description = "ID da entrada") @PathVariable UUID id) {
-        journalEntryService.deleteEntry(id);
+        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        journalEntryService.deleteEntry(id, userId);
         return ResponseEntity.noContent().build();
     }
 }

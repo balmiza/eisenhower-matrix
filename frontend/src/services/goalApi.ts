@@ -1,25 +1,21 @@
-import axios from 'axios'
 import { Goal, CreateGoalData } from '../types/Goal'
-
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
-})
+import authenticatedApi from './authenticatedApi'
 
 export const getAllGoals = async (): Promise<Goal[]> => {
-  const response = await api.get<Goal[]>('/goals')
+  const response = await authenticatedApi.get<Goal[]>('/goals')
   return response.data
 }
 
 export const createGoal = async (data: CreateGoalData): Promise<Goal> => {
-  const response = await api.post<Goal>('/goals', data)
+  const response = await authenticatedApi.post<Goal>('/goals', data)
   return response.data
 }
 
 export const updateGoal = async (id: string, data: CreateGoalData): Promise<Goal> => {
-  const response = await api.put<Goal>(`/goals/${id}`, data)
+  const response = await authenticatedApi.put<Goal>(`/goals/${id}`, data)
   return response.data
 }
 
 export const deleteGoal = async (id: string): Promise<void> => {
-  await api.delete(`/goals/${id}`)
+  await authenticatedApi.delete(`/goals/${id}`)
 }

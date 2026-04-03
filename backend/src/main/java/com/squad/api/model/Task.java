@@ -52,4 +52,7 @@ public class Task {
 
     @Column(name = "completed_at")
     private LocalDateTime completedAt;
+
+    @Column(name = "user_id", nullable = false)
+    private String userId;
 }

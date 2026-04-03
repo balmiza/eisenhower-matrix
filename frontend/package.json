@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "axios": "^1.6.7",
+    "firebase": "^12.11.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
@@ -32,7 +33,9 @@
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "jsdom",
-    "setupFilesAfterFramework": ["@testing-library/jest-dom"],
+    "setupFilesAfterFramework": [
+      "@testing-library/jest-dom"
+    ],
     "moduleNameMapper": {
       "\\.(css|less|scss|sass)$": "identity-obj-proxy",
       "\\.(jpg|jpeg|png|gif|svg)$": "<rootDir>/src/__mocks__/fileMock.js"

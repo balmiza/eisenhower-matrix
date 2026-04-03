@@ -22,7 +22,7 @@ public class TaskService {
     private final TaskRepository taskRepository;
 
     @Transactional
-    public Task createTask(TaskRequest request) {
+    public Task createTask(TaskRequest request, String userId) {
         Task task = Task.builder()
                 .title(request.getTitle())
                 .description(request.getDescription())
@@ -30,40 +30,49 @@ public class TaskService {
                 .dueDate(request.getDueDate())
                 .status(Status.PENDING)
                 .matrix(request.getMatrix() != null ? request.getMatrix() : Matrix.PERSONAL)
+                .userId(userId)
                 .build();
         return taskRepository.save(task);
     }
 
     @Transactional(readOnly = true)
-    public List<Task> getAllTasksByMatrix(Matrix matrix) {
-        return taskRepository.findAllByMatrixOrderByDueDate(matrix);
+    public List<Task> getAllTasksByMatrix(Matrix matrix, String userId) {
+        return taskRepository.findAllByMatrixAndUserIdOrderByDueDate(matrix, userId);
     }
 
     @Transactional(readOnly = true)
-    public List<Task> getTasksByQuadrantAndMatrix(Quadrant quadrant, Matrix matrix) {
-        return taskRepository.findByQuadrantAndMatrixOrderByDueDate(quadrant, matrix);
+    public List<Task> getTasksByQuadrantAndMatrix(Quadrant quadrant, Matrix matrix, String userId) {
+        return taskRepository.findByQuadrantAndMatrixAndUserIdOrderByDueDate(quadrant, matrix, userId);
     }
 
     @Transactional
-    public Task completeTask(UUID id) {
+    public Task completeTask(UUID id, String userId) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Task not found with id: " + id));
+        if (!task.getUserId().equals(userId)) {
+            throw new EntityNotFoundException("Task not found with id: " + id);
+        }
         task.setStatus(Status.DONE);
         task.setCompletedAt(LocalDateTime.now());
         return taskRepository.save(task);
     }
 
     @Transactional
-    public Task moveTask(UUID id, Quadrant quadrant) {
+    public Task moveTask(UUID id, Quadrant quadrant, String userId) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Task not found with id: " + id));
+        if (!task.getUserId().equals(userId)) {
+            throw new EntityNotFoundException("Task not found with id: " + id);
+        }
         task.setQuadrant(quadrant);
         return taskRepository.save(task);
     }
 
     @Transactional
-    public void deleteTask(UUID id) {
-        if (!taskRepository.existsById(id)) {
+    public void deleteTask(UUID id, String userId) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Task not found with id: " + id));
+        if (!task.getUserId().equals(userId)) {
             throw new EntityNotFoundException("Task not found with id: " + id);
         }
         taskRepository.deleteById(id);

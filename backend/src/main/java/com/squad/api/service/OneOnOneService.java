@@ -18,26 +18,30 @@ public class OneOnOneService {
     private final OneOnOneRepository oneOnOneRepository;
 
     @Transactional
-    public OneOnOne createOneOnOne(OneOnOneRequest request) {
+    public OneOnOne createOneOnOne(OneOnOneRequest request, String userId) {
         OneOnOne oneOnOne = OneOnOne.builder()
                 .date(request.getDate())
                 .manager(request.getManager())
                 .agenda(request.getAgenda())
                 .notes(request.getNotes())
                 .nextSteps(request.getNextSteps())
+                .userId(userId)
                 .build();
         return oneOnOneRepository.save(oneOnOne);
     }
 
     @Transactional(readOnly = true)
-    public List<OneOnOne> getAllOneOnOnes() {
-        return oneOnOneRepository.findAllOrderByDateDesc();
+    public List<OneOnOne> getAllOneOnOnes(String userId) {
+        return oneOnOneRepository.findAllByUserIdOrderByDateDesc(userId);
     }
 
     @Transactional
-    public OneOnOne updateOneOnOne(UUID id, OneOnOneRequest request) {
+    public OneOnOne updateOneOnOne(UUID id, OneOnOneRequest request, String userId) {
         OneOnOne oneOnOne = oneOnOneRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("OneOnOne not found with id: " + id));
+        if (!oneOnOne.getUserId().equals(userId)) {
+            throw new EntityNotFoundException("OneOnOne not found with id: " + id);
+        }
         oneOnOne.setDate(request.getDate());
         oneOnOne.setManager(request.getManager());
         oneOnOne.setAgenda(request.getAgenda());
@@ -47,8 +51,10 @@ public class OneOnOneService {
     }
 
     @Transactional
-    public void deleteOneOnOne(UUID id) {
-        if (!oneOnOneRepository.existsById(id)) {
+    public void deleteOneOnOne(UUID id, String userId) {
+        OneOnOne oneOnOne = oneOnOneRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("OneOnOne not found with id: " + id));
+        if (!oneOnOne.getUserId().equals(userId)) {
             throw new EntityNotFoundException("OneOnOne not found with id: " + id);
         }
         oneOnOneRepository.deleteById(id);
