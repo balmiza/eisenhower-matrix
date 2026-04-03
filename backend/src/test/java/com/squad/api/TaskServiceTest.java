@@ -34,6 +34,8 @@ class TaskServiceTest {
     @InjectMocks
     private TaskService taskService;
 
+    private static final String USER_ID = "test-user-id";
+
     @Test
     void createTask_success() {
         TaskRequest request = new TaskRequest("Buy groceries", "Milk and eggs", Quadrant.Q1, null, null);
@@ -43,12 +45,13 @@ class TaskServiceTest {
                 .description("Milk and eggs")
                 .quadrant(Quadrant.Q1)
                 .status(Status.PENDING)
+                .userId(USER_ID)
                 .createdAt(LocalDateTime.now())
                 .build();
 
         when(taskRepository.save(any(Task.class))).thenReturn(savedTask);
 
-        Task result = taskService.createTask(request);
+        Task result = taskService.createTask(request, USER_ID);
 
         assertThat(result).isNotNull();
         assertThat(result.getTitle()).isEqualTo("Buy groceries");
@@ -59,16 +62,16 @@ class TaskServiceTest {
 
     @Test
     void getAllTasks_returnsList() {
-        Task task1 = Task.builder().id(UUID.randomUUID()).title("Task 1").quadrant(Quadrant.Q1).status(Status.PENDING).build();
-        Task task2 = Task.builder().id(UUID.randomUUID()).title("Task 2").quadrant(Quadrant.Q2).status(Status.DONE).build();
+        Task task1 = Task.builder().id(UUID.randomUUID()).title("Task 1").quadrant(Quadrant.Q1).status(Status.PENDING).userId(USER_ID).build();
+        Task task2 = Task.builder().id(UUID.randomUUID()).title("Task 2").quadrant(Quadrant.Q2).status(Status.DONE).userId(USER_ID).build();
 
-        when(taskRepository.findAllByMatrixOrderByDueDate(Matrix.PERSONAL)).thenReturn(Arrays.asList(task1, task2));
+        when(taskRepository.findAllByMatrixAndUserIdOrderByDueDate(Matrix.PERSONAL, USER_ID)).thenReturn(Arrays.asList(task1, task2));
 
-        List<Task> result = taskService.getAllTasksByMatrix(Matrix.PERSONAL);
+        List<Task> result = taskService.getAllTasksByMatrix(Matrix.PERSONAL, USER_ID);
 
         assertThat(result).hasSize(2);
         assertThat(result).containsExactlyInAnyOrder(task1, task2);
-        verify(taskRepository, times(1)).findAllByMatrixOrderByDueDate(Matrix.PERSONAL);
+        verify(taskRepository, times(1)).findAllByMatrixAndUserIdOrderByDueDate(Matrix.PERSONAL, USER_ID);
     }
 
     @Test
@@ -79,19 +82,21 @@ class TaskServiceTest {
                 .title("Task to complete")
                 .quadrant(Quadrant.Q3)
                 .status(Status.PENDING)
+                .userId(USER_ID)
                 .build();
         Task completedTask = Task.builder()
                 .id(taskId)
                 .title("Task to complete")
                 .quadrant(Quadrant.Q3)
                 .status(Status.DONE)
+                .userId(USER_ID)
                 .completedAt(LocalDateTime.now())
                 .build();
 
         when(taskRepository.findById(taskId)).thenReturn(Optional.of(task));
         when(taskRepository.save(any(Task.class))).thenReturn(completedTask);
 
-        Task result = taskService.completeTask(taskId);
+        Task result = taskService.completeTask(taskId, USER_ID);
 
         assertThat(result.getStatus()).isEqualTo(Status.DONE);
         assertThat(result.getCompletedAt()).isNotNull();
@@ -104,7 +109,7 @@ class TaskServiceTest {
         UUID taskId = UUID.randomUUID();
         when(taskRepository.findById(taskId)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> taskService.completeTask(taskId))
+        assertThatThrownBy(() -> taskService.completeTask(taskId, USER_ID))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining(taskId.toString());
     }
@@ -112,21 +117,22 @@ class TaskServiceTest {
     @Test
     void deleteTask_callsRepository() {
         UUID taskId = UUID.randomUUID();
-        when(taskRepository.existsById(taskId)).thenReturn(true);
+        Task task = Task.builder().id(taskId).title("Task").quadrant(Quadrant.Q1).status(Status.PENDING).userId(USER_ID).build();
+        when(taskRepository.findById(taskId)).thenReturn(Optional.of(task));
         doNothing().when(taskRepository).deleteById(taskId);
 
-        taskService.deleteTask(taskId);
+        taskService.deleteTask(taskId, USER_ID);
 
-        verify(taskRepository, times(1)).existsById(taskId);
+        verify(taskRepository, times(1)).findById(taskId);
         verify(taskRepository, times(1)).deleteById(taskId);
     }
 
     @Test
     void deleteTask_throwsWhenNotFound() {
         UUID taskId = UUID.randomUUID();
-        when(taskRepository.existsById(taskId)).thenReturn(false);
+        when(taskRepository.findById(taskId)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> taskService.deleteTask(taskId))
+        assertThatThrownBy(() -> taskService.deleteTask(taskId, USER_ID))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining(taskId.toString());
     }
