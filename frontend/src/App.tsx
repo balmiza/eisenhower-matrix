@@ -8,6 +8,7 @@ import ConfirmModal from './components/ConfirmModal'
 import Sidebar, { Page } from './components/Sidebar'
 import PdiPage from './pages/PdiPage'
 import BooksPage from './pages/BooksPage'
+import JournalPage from './pages/JournalPage'
 import OneOnOnePage from './pages/OneOnOnePage'
 import './App.css'
 
@@ -118,7 +119,9 @@ const App: React.FC = () => {
       />
 
       <div className="app-content">
-        {activePage === 'pdi' ? (
+        {activePage === 'journal' ? (
+          <JournalPage />
+        ) : activePage === 'pdi' ? (
           <PdiPage />
         ) : activePage === 'books' ? (
           <BooksPage />
