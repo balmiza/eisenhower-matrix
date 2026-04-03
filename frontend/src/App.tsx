@@ -34,14 +34,6 @@ const App: React.FC = () => {
   const [toasts, setToasts] = useState<ToastMessage[]>([])
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
 
-  if (authLoading) {
-    return <div className="app-loading"><p>Carregando...</p></div>
-  }
-
-  if (!currentUser) {
-    return <LoginPage />
-  }
-
   const showToast = (message: string, type: ToastType) => {
     const id = Date.now()
     setToasts((prev) => [...prev, { id, message, type }])
@@ -49,8 +41,16 @@ const App: React.FC = () => {
   const dismissToast = (id: number) => setToasts((prev) => prev.filter((t) => t.id !== id))
 
   useEffect(() => {
-    if (activePage === 'tasks') loadTasks()
-  }, [selectedMatrix, activePage])
+    if (activePage === 'tasks' && currentUser) loadTasks()
+  }, [selectedMatrix, activePage, currentUser])
+
+  if (authLoading) {
+    return <div className="app-loading"><p>Carregando...</p></div>
+  }
+
+  if (!currentUser) {
+    return <LoginPage />
+  }
 
   const loadTasks = async () => {
     try {
