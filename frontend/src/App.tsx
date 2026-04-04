@@ -12,6 +12,7 @@ import JournalPage from './pages/JournalPage'
 import OneOnOnePage from './pages/OneOnOnePage'
 import { useAuth } from './contexts/AuthContext'
 import LoginPage from './pages/LoginPage'
+import { useKeepAlive } from './hooks/useKeepAlive'
 import './App.css'
 
 const QUADRANTS: { key: Quadrant; title: string; color: string }[] = [
@@ -23,6 +24,7 @@ const QUADRANTS: { key: Quadrant; title: string; color: string }[] = [
 
 const App: React.FC = () => {
   const { currentUser, loading: authLoading, signOut } = useAuth()
+  useKeepAlive()
   const [activePage, setActivePage] = useState<Page>('tasks')
   const [tasks, setTasks] = useState<Task[]>([])
   const [loading, setLoading] = useState(true)
