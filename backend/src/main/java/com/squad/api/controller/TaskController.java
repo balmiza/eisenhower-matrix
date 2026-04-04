@@ -21,7 +21,6 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/tasks")
-@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @Tag(name = "Tasks", description = "Gerenciamento de tarefas da Matriz de Eisenhower")
 public class TaskController {

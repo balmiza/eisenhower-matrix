@@ -19,7 +19,6 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/journal")
-@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @Tag(name = "Journal", description = "Gerenciamento do Diário de Bordo")
 public class JournalEntryController {

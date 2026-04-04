@@ -19,7 +19,6 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/one-on-ones")
-@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @Tag(name = "1:1s", description = "Gerenciamento de reuniões one-on-one")
 public class OneOnOneController {
