@@ -9,6 +9,7 @@ const defaultProps = {
   onMatrixChange: jest.fn(),
   isOpen: false,
   onClose: jest.fn(),
+  onSignOut: jest.fn(),
 }
 
 describe('Sidebar', () => {
