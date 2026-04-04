@@ -13,7 +13,11 @@ const TIMEFRAMES: { key: GoalTimeframe; label: string; sublabel: string }[] = [
   { key: 'LONG', label: 'Longo prazo', sublabel: '2+ anos' },
 ]
 
-const PdiPage: React.FC = () => {
+interface PdiPageProps {
+  sortBy: 'date' | 'createdAt'
+}
+
+const PdiPage: React.FC<PdiPageProps> = ({ sortBy }) => {
   const [goals, setGoals] = useState<Goal[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -75,7 +79,15 @@ const PdiPage: React.FC = () => {
   }
 
   const getGoalsByTimeframe = (timeframe: GoalTimeframe) =>
-    goals.filter((g) => g.timeframe === timeframe)
+    goals.filter((g) => g.timeframe === timeframe).sort((a, b) => {
+      if (sortBy === 'date') {
+        if (!a.dueDate && !b.dueDate) return 0
+        if (!a.dueDate) return 1
+        if (!b.dueDate) return -1
+        return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
+      }
+      return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+    })
 
   if (loading) {
     return <div className="app-loading"><p>Carregando metas...</p></div>

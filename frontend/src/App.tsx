@@ -39,7 +39,7 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null)
   const [modalQuadrant, setModalQuadrant] = useState<Quadrant | null>(null)
   const [selectedMatrix, setSelectedMatrix] = useState<Matrix>('PERSONAL')
-  const [sortBy, setSortBy] = useState<'dueDate' | 'createdAt'>('dueDate')
+  const [sortBy, setSortBy] = useState<'date' | 'createdAt'>('date')
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [toasts, setToasts] = useState<ToastMessage[]>([])
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
@@ -118,7 +118,7 @@ const App: React.FC = () => {
   const getTasksByQuadrant = (quadrant: Quadrant): Task[] => {
     const filtered = tasks.filter((t) => t.quadrant === quadrant)
     return [...filtered].sort((a, b) => {
-      if (sortBy === 'dueDate') {
+      if (sortBy === 'date') {
         if (!a.dueDate && !b.dueDate) return 0
         if (!a.dueDate) return 1
         if (!b.dueDate) return -1
@@ -137,6 +137,7 @@ const App: React.FC = () => {
         onMatrixChange={setSelectedMatrix}
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
+        onSignOut={signOut}
       />
 
       <div className="app-content">
@@ -152,38 +153,33 @@ const App: React.FC = () => {
               <span />
             </button>
             <h1 className="app-title">{PAGE_TITLES[activePage]}</h1>
-            <button className="logout-btn" onClick={signOut}>Sair</button>
           </div>
-          {activePage === 'tasks' && (
-            <>
-              <div className="sort-controls">
-                <span className="sort-controls__label">Ordenar por:</span>
-                <button
-                  className={`sort-controls__btn ${sortBy === 'dueDate' ? 'sort-controls__btn--active' : ''}`}
-                  onClick={() => setSortBy('dueDate')}
-                >
-                  Data Limite
-                </button>
-                <button
-                  className={`sort-controls__btn ${sortBy === 'createdAt' ? 'sort-controls__btn--active' : ''}`}
-                  onClick={() => setSortBy('createdAt')}
-                >
-                  Data de Criação
-                </button>
-              </div>
-              {error && <p className="app-error">{error}</p>}
-            </>
-          )}
+          <div className="sort-controls">
+            <span className="sort-controls__label">Ordenar por:</span>
+            <button
+              className={`sort-controls__btn ${sortBy === 'date' ? 'sort-controls__btn--active' : ''}`}
+              onClick={() => setSortBy('date')}
+            >
+              Data
+            </button>
+            <button
+              className={`sort-controls__btn ${sortBy === 'createdAt' ? 'sort-controls__btn--active' : ''}`}
+              onClick={() => setSortBy('createdAt')}
+            >
+              Data de Criação
+            </button>
+          </div>
+          {activePage === 'tasks' && error && <p className="app-error">{error}</p>}
         </header>
 
         {activePage === 'journal' ? (
-          <JournalPage />
+          <JournalPage sortBy={sortBy} />
         ) : activePage === 'pdi' ? (
-          <PdiPage />
+          <PdiPage sortBy={sortBy} />
         ) : activePage === 'books' ? (
-          <BooksPage />
+          <BooksPage sortBy={sortBy} />
         ) : activePage === 'one-on-ones' ? (
-          <OneOnOnePage />
+          <OneOnOnePage sortBy={sortBy} />
         ) : (
           <div className="app">
             {loading ? (
