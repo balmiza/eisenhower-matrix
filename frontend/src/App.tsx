@@ -22,6 +22,14 @@ const QUADRANTS: { key: Quadrant; title: string; color: string }[] = [
   { key: 'Q4', title: '⚪ Eliminar — Não Urgente, Não Importante', color: '#6b7280' },
 ]
 
+const PAGE_TITLES: Record<string, string> = {
+  tasks: 'Matriz de Eisenhower',
+  pdi: 'PDI',
+  books: 'Livros',
+  journal: 'Diário de Bordo',
+  'one-on-ones': '1:1s',
+}
+
 const App: React.FC = () => {
   const { currentUser, loading: authLoading, signOut } = useAuth()
   useKeepAlive()
@@ -132,30 +140,22 @@ const App: React.FC = () => {
       />
 
       <div className="app-content">
-        {activePage === 'journal' ? (
-          <JournalPage />
-        ) : activePage === 'pdi' ? (
-          <PdiPage />
-        ) : activePage === 'books' ? (
-          <BooksPage />
-        ) : activePage === 'one-on-ones' ? (
-          <OneOnOnePage />
-        ) : (
-          <div className="app">
-            <header className="app-header">
-              <div className="app-header__top">
-                <button
-                  className="hamburger"
-                  onClick={() => setSidebarOpen((prev) => !prev)}
-                  aria-label="Abrir menu"
-                >
-                  <span />
-                  <span />
-                  <span />
-                </button>
-                <h1 className="app-title">Matriz de Eisenhower</h1>
-                <button className="logout-btn" onClick={signOut}>Sair</button>
-              </div>
+        <header className="app-header">
+          <div className="app-header__top">
+            <button
+              className="hamburger"
+              onClick={() => setSidebarOpen((prev) => !prev)}
+              aria-label="Abrir menu"
+            >
+              <span />
+              <span />
+              <span />
+            </button>
+            <h1 className="app-title">{PAGE_TITLES[activePage]}</h1>
+            <button className="logout-btn" onClick={signOut}>Sair</button>
+          </div>
+          {activePage === 'tasks' && (
+            <>
               <div className="sort-controls">
                 <span className="sort-controls__label">Ordenar por:</span>
                 <button
@@ -172,8 +172,20 @@ const App: React.FC = () => {
                 </button>
               </div>
               {error && <p className="app-error">{error}</p>}
-            </header>
+            </>
+          )}
+        </header>
 
+        {activePage === 'journal' ? (
+          <JournalPage />
+        ) : activePage === 'pdi' ? (
+          <PdiPage />
+        ) : activePage === 'books' ? (
+          <BooksPage />
+        ) : activePage === 'one-on-ones' ? (
+          <OneOnOnePage />
+        ) : (
+          <div className="app">
             {loading ? (
               <div className="app-loading"><p>Carregando tarefas...</p></div>
             ) : (
