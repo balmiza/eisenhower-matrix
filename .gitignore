@@ -8,6 +8,13 @@ target/
 node_modules/
 dist/
 .env
+.env.local
+.env.production
+.env.*.local
+
+# Firebase secrets
+firebase-service-account.json
+*-service-account.json
 
 # IDE
 .idea/
