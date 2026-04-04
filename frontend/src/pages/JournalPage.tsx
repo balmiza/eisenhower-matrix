@@ -6,7 +6,11 @@ import JournalEntryModal from '../components/journal/JournalEntryModal'
 import ConfirmModal from '../components/ConfirmModal'
 import Toast, { ToastMessage, ToastType } from '../components/Toast'
 
-const JournalPage: React.FC = () => {
+interface JournalPageProps {
+  sortBy: 'date' | 'createdAt'
+}
+
+const JournalPage: React.FC<JournalPageProps> = ({ sortBy }) => {
   const [entries, setEntries] = useState<JournalEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -115,7 +119,10 @@ const JournalPage: React.FC = () => {
         {entries.length === 0 ? (
           <p className="journal-empty">Nenhuma entrada. Clique em + Nova Entrada para começar.</p>
         ) : (
-          entries.map((entry) => (
+          [...entries].sort((a, b) => {
+            if (sortBy === 'date') return new Date(b.date).getTime() - new Date(a.date).getTime()
+            return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          }).map((entry) => (
             <JournalEntryCard
               key={entry.id}
               entry={entry}

@@ -10,6 +10,7 @@ interface SidebarProps {
   onMatrixChange: (matrix: Matrix) => void
   isOpen: boolean
   onClose: () => void
+  onSignOut: () => void
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
@@ -19,6 +20,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   onMatrixChange,
   isOpen,
   onClose,
+  onSignOut,
 }) => {
   const handleNavigate = (page: Page) => {
     onNavigate(page)
@@ -88,6 +90,12 @@ const Sidebar: React.FC<SidebarProps> = ({
         >
           🤝 1:1s
         </button>
+
+        <div className="sidebar__footer">
+          <button className="sidebar__signout" onClick={onSignOut}>
+            Sair
+          </button>
+        </div>
       </nav>
     </>
   )
