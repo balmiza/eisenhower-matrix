@@ -19,7 +19,6 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/books")
-@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @Tag(name = "Books", description = "Gerenciamento da biblioteca de livros")
 public class BookController {
