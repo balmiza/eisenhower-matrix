@@ -12,4 +12,8 @@ services:
         sync: false
       - key: DB_PASSWORD
         sync: false
-    healthCheckPath: /api/tasks
+      - key: FIREBASE_SERVICE_ACCOUNT_JSON
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+    healthCheckPath: /api/health

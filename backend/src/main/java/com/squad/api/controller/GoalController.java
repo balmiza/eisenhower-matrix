@@ -19,7 +19,6 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/goals")
-@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @Tag(name = "Goals", description = "Gerenciamento de metas do PDI")
 public class GoalController {

@@ -22,6 +22,14 @@ const QUADRANTS: { key: Quadrant; title: string; color: string }[] = [
   { key: 'Q4', title: '⚪ Eliminar — Não Urgente, Não Importante', color: '#6b7280' },
 ]
 
+const PAGE_TITLES: Record<string, string> = {
+  tasks: 'Matriz de Eisenhower',
+  pdi: 'PDI',
+  books: 'Livros',
+  journal: 'Diário de Bordo',
+  'one-on-ones': '1:1s',
+}
+
 const App: React.FC = () => {
   const { currentUser, loading: authLoading, signOut } = useAuth()
   useKeepAlive()
@@ -31,7 +39,7 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null)
   const [modalQuadrant, setModalQuadrant] = useState<Quadrant | null>(null)
   const [selectedMatrix, setSelectedMatrix] = useState<Matrix>('PERSONAL')
-  const [sortBy, setSortBy] = useState<'dueDate' | 'createdAt'>('dueDate')
+  const [sortBy, setSortBy] = useState<'date' | 'createdAt'>('date')
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [toasts, setToasts] = useState<ToastMessage[]>([])
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
@@ -110,7 +118,7 @@ const App: React.FC = () => {
   const getTasksByQuadrant = (quadrant: Quadrant): Task[] => {
     const filtered = tasks.filter((t) => t.quadrant === quadrant)
     return [...filtered].sort((a, b) => {
-      if (sortBy === 'dueDate') {
+      if (sortBy === 'date') {
         if (!a.dueDate && !b.dueDate) return 0
         if (!a.dueDate) return 1
         if (!b.dueDate) return -1
@@ -129,51 +137,51 @@ const App: React.FC = () => {
         onMatrixChange={setSelectedMatrix}
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
+        onSignOut={signOut}
       />
 
       <div className="app-content">
+        <header className="app-header">
+          <div className="app-header__top">
+            <button
+              className="hamburger"
+              onClick={() => setSidebarOpen((prev) => !prev)}
+              aria-label="Abrir menu"
+            >
+              <span />
+              <span />
+              <span />
+            </button>
+            <h1 className="app-title">{PAGE_TITLES[activePage]}</h1>
+          </div>
+          <div className="sort-controls">
+            <span className="sort-controls__label">Ordenar por:</span>
+            <button
+              className={`sort-controls__btn ${sortBy === 'date' ? 'sort-controls__btn--active' : ''}`}
+              onClick={() => setSortBy('date')}
+            >
+              Data
+            </button>
+            <button
+              className={`sort-controls__btn ${sortBy === 'createdAt' ? 'sort-controls__btn--active' : ''}`}
+              onClick={() => setSortBy('createdAt')}
+            >
+              Data de Criação
+            </button>
+          </div>
+          {activePage === 'tasks' && error && <p className="app-error">{error}</p>}
+        </header>
+
         {activePage === 'journal' ? (
-          <JournalPage />
+          <JournalPage sortBy={sortBy} />
         ) : activePage === 'pdi' ? (
-          <PdiPage />
+          <PdiPage sortBy={sortBy} />
         ) : activePage === 'books' ? (
-          <BooksPage />
+          <BooksPage sortBy={sortBy} />
         ) : activePage === 'one-on-ones' ? (
-          <OneOnOnePage />
+          <OneOnOnePage sortBy={sortBy} />
         ) : (
           <div className="app">
-            <header className="app-header">
-              <div className="app-header__top">
-                <button
-                  className="hamburger"
-                  onClick={() => setSidebarOpen((prev) => !prev)}
-                  aria-label="Abrir menu"
-                >
-                  <span />
-                  <span />
-                  <span />
-                </button>
-                <h1 className="app-title">Matriz de Eisenhower</h1>
-                <button className="logout-btn" onClick={signOut}>Sair</button>
-              </div>
-              <div className="sort-controls">
-                <span className="sort-controls__label">Ordenar por:</span>
-                <button
-                  className={`sort-controls__btn ${sortBy === 'dueDate' ? 'sort-controls__btn--active' : ''}`}
-                  onClick={() => setSortBy('dueDate')}
-                >
-                  Data Limite
-                </button>
-                <button
-                  className={`sort-controls__btn ${sortBy === 'createdAt' ? 'sort-controls__btn--active' : ''}`}
-                  onClick={() => setSortBy('createdAt')}
-                >
-                  Data de Criação
-                </button>
-              </div>
-              {error && <p className="app-error">{error}</p>}
-            </header>
-
             {loading ? (
               <div className="app-loading"><p>Carregando tarefas...</p></div>
             ) : (

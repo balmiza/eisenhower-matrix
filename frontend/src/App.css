@@ -571,6 +571,30 @@ body {
 .sidebar__subitem:hover { background: #2a2a3e; color: #ddd; }
 .sidebar__subitem--active { background: #2a2a3e; color: #fff; }
 
+.sidebar__footer {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid #2a2a3e;
+}
+
+.sidebar__signout {
+  background: none;
+  border: none;
+  color: #888;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+  width: 100%;
+  transition: background 0.2s, color 0.2s;
+}
+
+.sidebar__signout:hover {
+  background: #2a2a3e;
+  color: #ef4444;
+}
+
 /* === PDI Page === */
 .pdi-page {
   display: flex;

@@ -16,6 +16,9 @@ public class FirebaseConfig {
     public void initialize() throws IOException {
         if (FirebaseApp.getApps().isEmpty()) {
             String serviceAccountJson = System.getenv("FIREBASE_SERVICE_ACCOUNT_JSON");
+            if (serviceAccountJson == null || serviceAccountJson.isBlank()) {
+                throw new IllegalStateException("Environment variable FIREBASE_SERVICE_ACCOUNT_JSON is not set");
+            }
             GoogleCredentials credentials = GoogleCredentials.fromStream(
                 new ByteArrayInputStream(serviceAccountJson.getBytes(StandardCharsets.UTF_8))
             );

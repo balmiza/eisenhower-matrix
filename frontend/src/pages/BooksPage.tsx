@@ -6,7 +6,11 @@ import BookModal from '../components/books/BookModal'
 import ConfirmModal from '../components/ConfirmModal'
 import Toast, { ToastMessage, ToastType } from '../components/Toast'
 
-const BooksPage: React.FC = () => {
+interface BooksPageProps {
+  sortBy: 'date' | 'createdAt'
+}
+
+const BooksPage: React.FC<BooksPageProps> = ({ sortBy }) => {
   const [books, setBooks] = useState<Book[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -116,7 +120,15 @@ const BooksPage: React.FC = () => {
         {books.length === 0 ? (
           <p className="books-empty">Nenhum livro. Clique em + Novo Livro para adicionar.</p>
         ) : (
-          books.map((book) => (
+          [...books].sort((a, b) => {
+            if (sortBy === 'date') {
+              if (!a.readingDate && !b.readingDate) return 0
+              if (!a.readingDate) return 1
+              if (!b.readingDate) return -1
+              return new Date(a.readingDate).getTime() - new Date(b.readingDate).getTime()
+            }
+            return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          }).map((book) => (
             <BookCard
               key={book.id}
               book={book}

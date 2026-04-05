@@ -6,7 +6,11 @@ import OneOnOneModal from '../components/one-on-ones/OneOnOneModal'
 import ConfirmModal from '../components/ConfirmModal'
 import Toast, { ToastMessage, ToastType } from '../components/Toast'
 
-const OneOnOnePage: React.FC = () => {
+interface OneOnOnePageProps {
+  sortBy: 'date' | 'createdAt'
+}
+
+const OneOnOnePage: React.FC<OneOnOnePageProps> = ({ sortBy }) => {
   const [oneOnOnes, setOneOnOnes] = useState<OneOnOne[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -101,7 +105,10 @@ const OneOnOnePage: React.FC = () => {
         {oneOnOnes.length === 0 ? (
           <p className="one-on-one-empty">Nenhuma reunião registrada. Clique em + Nova Reunião para adicionar.</p>
         ) : (
-          oneOnOnes.map((oneOnOne) => (
+          [...oneOnOnes].sort((a, b) => {
+            if (sortBy === 'date') return new Date(b.date).getTime() - new Date(a.date).getTime()
+            return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          }).map((oneOnOne) => (
             <OneOnOneCard
               key={oneOnOne.id}
               oneOnOne={oneOnOne}
