@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
+import googleIcon from '../assets/google-icon.svg'
 
 const LoginPage: React.FC = () => {
   const { signInWithGoogle, signInWithEmail, signUpWithEmail } = useAuth()
@@ -56,7 +57,7 @@ const LoginPage: React.FC = () => {
         </div>
 
         <button className="login-google-btn" onClick={handleGoogle} disabled={loading}>
-          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" width={20} />
+          <img src={googleIcon} alt="Google" width={20} />
           Entrar com Google
         </button>
 
