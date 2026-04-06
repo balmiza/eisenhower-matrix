@@ -1,5 +1,7 @@
 package com.squad.api.filter;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -8,34 +10,27 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 public class RateLimitFilter extends OncePerRequestFilter {
 
     private static final int MAX_REQUESTS_PER_MINUTE = 60;
-    private static final long WINDOW_MS = 60_000;
 
-    private final ConcurrentHashMap<String, long[]> requestCounts = new ConcurrentHashMap<>();
+    private final Cache<String, AtomicInteger> requestCounts = Caffeine.newBuilder()
+            .expireAfterWrite(1, TimeUnit.MINUTES)
+            .maximumSize(10_000)
+            .build();
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        String ip = getClientIp(request);
-        long now = System.currentTimeMillis();
+        String ip = request.getRemoteAddr();
 
-        requestCounts.compute(ip, (key, window) -> {
-            if (window == null || now - window[0] > WINDOW_MS) {
-                return new long[]{now, 1};
-            }
-            window[1]++;
-            return window;
-        });
-
-        long[] window = requestCounts.get(ip);
-        if (window[1] > MAX_REQUESTS_PER_MINUTE) {
+        AtomicInteger count = requestCounts.get(ip, key -> new AtomicInteger(0));
+        if (count.incrementAndGet() > MAX_REQUESTS_PER_MINUTE) {
             response.setStatus(429);
             response.setContentType("application/json");
             response.getWriter().write("{\"error\": \"Too many requests. Please try again later.\"}");
@@ -43,13 +38,5 @@ public class RateLimitFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
-    }
-
-    private String getClientIp(HttpServletRequest request) {
-        String forwarded = request.getHeader("X-Forwarded-For");
-        if (forwarded != null && !forwarded.isBlank()) {
-            return forwarded.split(",")[0].trim();
-        }
-        return request.getRemoteAddr();
     }
 }
