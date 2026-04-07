@@ -81,6 +81,84 @@ Cada item tem uma prioridade (🔴 Alta / 🟡 Média / 🔵 Baixa), uma estimat
 
 ---
 
+## 🆕 Novas Features
+
+---
+
+### 🏆 Conquistas e Portfólio de Carreira
+> Registro de realizações profissionais para usar em avaliações de desempenho, promoções e processos seletivos.
+
+- [ ] 🔴 M — Cadastro de conquistas (título, impacto, data, projeto relacionado)
+- [ ] 🔴 M — Vinculação de conquistas a metas do PDI
+- [ ] 🟡 G — Exportar portfólio de conquistas em PDF formatado
+- [ ] 🔵 G — Geração automática de bullet points no formato STAR (Situação, Tarefa, Ação, Resultado)
+
+---
+
+### 💬 Feedback
+> Registro centralizado de feedbacks recebidos e dados ao longo da carreira.
+
+- [ ] 🔴 M — Cadastro de feedback recebido (de quem, data, contexto, pontos fortes, pontos de melhoria)
+- [ ] 🔴 M — Cadastro de feedback dado (para quem, data, contexto)
+- [ ] 🟡 M — Vinculação de feedbacks a metas de desenvolvimento no PDI
+- [ ] 🟡 G — Painel de evolução: comparar feedbacks ao longo do tempo por competência
+- [ ] 🔵 M — Solicitação de feedback via link compartilhável
+
+---
+
+### 🔄 Retrospectivas
+> Espaço para reflexões periódicas (semanal, mensal, trimestral) sobre o desempenho e aprendizados.
+
+- [ ] 🔴 M — Criar retrospectiva com perguntas guiadas (O que foi bem? O que melhorar? O que tentar?)
+- [ ] 🟡 M — Templates de retrospectiva por período (semanal, mensal, trimestral, anual)
+- [ ] 🟡 M — Histórico de retrospectivas com linha do tempo
+- [ ] 🔵 G — Análise de padrões: temas recorrentes nas retrospectivas ao longo do tempo
+
+---
+
+### 🧠 Hábitos
+> Rastreamento de hábitos diários e semanais para construir consistência ao longo do tempo.
+
+- [ ] 🔴 M — Cadastro de hábitos com frequência (diário, semanal)
+- [ ] 🔴 M — Check-in diário de hábitos com streak (sequência de dias)
+- [ ] 🟡 M — Vinculação de hábitos a metas do PDI
+- [ ] 🟡 G — Heatmap de consistência (estilo GitHub contributions)
+- [ ] 🔵 M — Notificação de lembrete de check-in
+
+---
+
+### 🎓 Cursos e Certificações
+> Acompanhamento de cursos em andamento e certificações conquistadas.
+
+- [ ] 🔴 M — Cadastro de curso (nome, plataforma, carga horária, status, data de conclusão)
+- [ ] 🔴 P — Cadastro de certificação (nome, emissor, validade)
+- [ ] 🟡 M — Vinculação de cursos a metas do PDI
+- [ ] 🟡 P — Alerta de certificações próximas do vencimento
+- [ ] 🔵 G — Exportar histórico de cursos e certificações em PDF
+
+---
+
+### 📊 OKRs (Objetivos e Resultados-Chave)
+> Metodologia OKR para alinhar objetivos pessoais e profissionais com resultados mensuráveis.
+
+- [ ] 🟡 G — Cadastro de Objetivos com até 5 Key Results cada
+- [ ] 🟡 M — Atualização de progresso dos Key Results (0% a 100%)
+- [ ] 🟡 M — Ciclos de OKR por trimestre
+- [ ] 🔵 G — Painel de saúde dos OKRs com score geral por ciclo
+- [ ] 🔵 M — Vinculação de OKRs com metas do PDI
+
+---
+
+### 🗓️ Agenda Semanal
+> Planejamento intencional da semana com foco nas prioridades certas.
+
+- [ ] 🟡 M — Planejamento da semana: definir 3 prioridades principais antes de segunda-feira
+- [ ] 🟡 M — Revisão da semana: checklist de encerramento (o que planejei x o que fiz)
+- [ ] 🔵 G — Integração com Google Calendar para puxar eventos da semana automaticamente
+- [ ] 🔵 M — Histórico de planejamentos semanais
+
+---
+
 ## 🔒 Segurança / Tech Debt
 
 - [ ] 🟡 M — Atualizar Spring Boot para versão mais recente (atualmente 3.2.3)
