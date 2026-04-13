@@ -45,13 +45,6 @@ const Sidebar: React.FC<SidebarProps> = ({
         >
           📋 Matriz de Eisenhower
         </button>
-        <button
-          className={`sidebar__item ${activePage === 'weekly-goals' ? 'sidebar__item--active' : ''}`}
-          onClick={() => handleNavigate('weekly-goals')}
-        >
-          🗓️ Metas Semanais
-        </button>
-
         {activePage === 'tasks' && (
           <div className="sidebar__sub">
             <button
@@ -68,6 +61,13 @@ const Sidebar: React.FC<SidebarProps> = ({
             </button>
           </div>
         )}
+
+        <button
+          className={`sidebar__item ${activePage === 'weekly-goals' ? 'sidebar__item--active' : ''}`}
+          onClick={() => handleNavigate('weekly-goals')}
+        >
+          🗓️ Metas Semanais
+        </button>
 
         <p className="sidebar__section">Desenvolvimento</p>
         <button
