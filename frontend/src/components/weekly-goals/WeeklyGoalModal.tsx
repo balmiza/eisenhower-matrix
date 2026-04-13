@@ -10,19 +10,20 @@ interface WeeklyGoalModalProps {
 const WeeklyGoalModal: React.FC<WeeklyGoalModalProps> = ({ goal, onSave, onClose }) => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
-  const [priority, setPriority] = useState(1)
+  const [priorityInput, setPriorityInput] = useState('1')
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     if (goal) {
       setTitle(goal.title)
       setDescription(goal.description || '')
-      setPriority(goal.priority)
+      setPriorityInput(String(goal.priority))
     }
   }, [goal])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    const priority = Math.max(1, parseInt(priorityInput) || 1)
     setLoading(true)
     try {
       await onSave({ title, description: description || undefined, priority })
@@ -65,8 +66,9 @@ const WeeklyGoalModal: React.FC<WeeklyGoalModalProps> = ({ goal, onSave, onClose
             <input
               type="number"
               className="form-input"
-              value={priority}
-              onChange={(e) => setPriority(Math.max(1, parseInt(e.target.value) || 1))}
+              value={priorityInput}
+              onChange={(e) => setPriorityInput(e.target.value)}
+              onBlur={() => setPriorityInput(String(Math.max(1, parseInt(priorityInput) || 1)))}
               min={1}
               required
             />
