@@ -1,7 +1,7 @@
 import React from 'react'
 import { Matrix } from '../types/Task'
 
-export type Page = 'tasks' | 'pdi' | 'books' | 'journal' | 'one-on-ones'
+export type Page = 'tasks' | 'pdi' | 'books' | 'journal' | 'one-on-ones' | 'weekly-goals'
 
 interface SidebarProps {
   activePage: Page
@@ -44,6 +44,12 @@ const Sidebar: React.FC<SidebarProps> = ({
           onClick={() => handleNavigate('tasks')}
         >
           📋 Matriz de Eisenhower
+        </button>
+        <button
+          className={`sidebar__item ${activePage === 'weekly-goals' ? 'sidebar__item--active' : ''}`}
+          onClick={() => handleNavigate('weekly-goals')}
+        >
+          🗓️ Metas Semanais
         </button>
 
         {activePage === 'tasks' && (
