@@ -138,6 +138,17 @@ Cada item tem uma prioridade (🔴 Alta / 🟡 Média / 🔵 Baixa), uma estimat
 
 ---
 
+### 💡 Ideias
+> Página simples de captura rápida de ideias que surgem durante o dia. Sem categorias complexas — apenas título, descrição opcional e data de registro.
+
+- [ ] 🔴 P — Cadastro de ideia (título + descrição opcional)
+- [ ] 🔴 P — Listagem de ideias em ordem cronológica (mais recente primeiro)
+- [ ] 🟡 P — Edição e exclusão de ideias
+- [ ] 🟡 P — Filtro por palavra-chave (busca simples)
+- [ ] 🔵 P — Marcar ideia como "favorita" para destacar
+
+---
+
 ### 📊 OKRs (Objetivos e Resultados-Chave)
 > Metodologia OKR para alinhar objetivos pessoais e profissionais com resultados mensuráveis.
 
