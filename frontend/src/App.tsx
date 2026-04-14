@@ -11,6 +11,7 @@ import BooksPage from './pages/BooksPage'
 import JournalPage from './pages/JournalPage'
 import OneOnOnePage from './pages/OneOnOnePage'
 import WeeklyGoalsPage from './pages/WeeklyGoalsPage'
+import IdeasPage from './pages/IdeasPage'
 import { useAuth } from './contexts/AuthContext'
 import LoginPage from './pages/LoginPage'
 import { useKeepAlive } from './hooks/useKeepAlive'
@@ -30,6 +31,7 @@ const PAGE_TITLES: Record<string, string> = {
   journal: 'Diário de Bordo',
   'one-on-ones': '1:1s',
   'weekly-goals': 'Metas Semanais',
+  ideas: 'Ideias',
 }
 
 const App: React.FC = () => {
@@ -184,6 +186,8 @@ const App: React.FC = () => {
           <OneOnOnePage sortBy={sortBy} />
         ) : activePage === 'weekly-goals' ? (
           <WeeklyGoalsPage />
+        ) : activePage === 'ideas' ? (
+          <IdeasPage />
         ) : (
           <div className="app">
             {loading ? (
