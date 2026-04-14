@@ -138,29 +138,14 @@ Cada item tem uma prioridade (🔴 Alta / 🟡 Média / 🔵 Baixa), uma estimat
 
 ---
 
-### 📈 Insights
-> Painel analítico que cruza os dados de todas as seções da plataforma e exibe padrões, tendências e métricas de evolução — sem depender de IA externa. O objetivo é transformar os registros do usuário em inteligência acionável.
+### 💡 Ideias
+> Página simples de captura rápida de ideias que surgem durante o dia. Sem categorias complexas — apenas título, descrição opcional e data de registro.
 
-**Visão geral sugerida:**
-- Resumo da semana atual: tarefas concluídas, metas atingidas, entradas no diário, hábitos em dia
-- Score de produtividade semanal (ponderado por quadrante da Matriz de Eisenhower)
-- Gráfico de tarefas concluídas por semana (últimas 8 semanas)
-
-**Métricas por seção:**
-- [ ] 🔴 M — Gráfico de tarefas concluídas vs criadas por semana (Matriz de Eisenhower)
-- [ ] 🔴 M — Evolução do progresso do PDI ao longo do tempo (linha do tempo)
-- [ ] 🔴 M — Livros lidos por mês com meta anual de leitura
-- [ ] 🟡 M — Frequência de entradas no Diário de Bordo por semana
-- [ ] 🟡 M — Frequência de 1:1s realizados por mês por gestor
-- [ ] 🟡 M — Taxa de conclusão de Metas Semanais (últimas 4 semanas)
-
-**Padrões e inteligência:**
-- [ ] 🟡 G — Detecção de padrão: dia da semana com mais tarefas concluídas
-- [ ] 🟡 G — Identificação de quadrante dominante (onde o usuário passa mais tempo)
-- [ ] 🔵 G — Correlação entre frequência de 1:1s e progresso do PDI
-- [ ] 🔵 G — Resumo mensal automático consolidado (gerado a partir dos registros)
-
-**Complexidade técnica:** Médio-Grande. Os dados já existem no banco — é questão de agregar via queries e exibir com uma biblioteca de gráficos leve (ex: Recharts, já popular no ecossistema React).
+- [ ] 🔴 P — Cadastro de ideia (título + descrição opcional)
+- [ ] 🔴 P — Listagem de ideias em ordem cronológica (mais recente primeiro)
+- [ ] 🟡 P — Edição e exclusão de ideias
+- [ ] 🟡 P — Filtro por palavra-chave (busca simples)
+- [ ] 🔵 P — Marcar ideia como "favorita" para destacar
 
 ---
 
